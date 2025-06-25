@@ -290,240 +290,86 @@ export default function FamilyMembersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
-      <div className="container mx-auto px-6 py-8">
-        {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mb-4 shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-2">
-            Thành Viên Gia Đình
+    <div className="min-h-screen bg-gray-50 p-4">
+      <div className="max-w-full mx-auto">
+        {/* Simple Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Thành Viên Gia Đình ({familyMembers.length} người)
           </h1>
-          <p className="text-slate-600 text-lg">
-            Quản lý và theo dõi thông tin chi tiết của 
-            <span className="font-semibold text-blue-600 mx-1">{familyMembers.length}</span>
-            thành viên
-          </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-100 text-sm font-medium">Tổng thành viên</p>
-                  <p className="text-3xl font-bold">{familyMembers.length}</p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-emerald-100 text-sm font-medium">Tuổi trung bình</p>
-                  <p className="text-3xl font-bold">
-                    {familyMembers.length > 0 ? Math.round(familyMembers.reduce((sum, m) => sum + m.age, 0) / familyMembers.length) : 0}
-                  </p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"/>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-purple-100 text-sm font-medium">Thiên phú cao</p>
-                  <p className="text-3xl font-bold">
-                    {familyMembers.filter(m => m.talent >= 1000).length}
-                  </p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-orange-100 text-sm font-medium">Sức khỏe tốt</p>
-                  <p className="text-3xl font-bold">
-                    {familyMembers.filter(m => m.health >= 70).length}
-                  </p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
-                  </svg>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Table Card */}
-        <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
-          <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl font-bold text-slate-800 flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                  </svg>
-                </div>
-                Chi Tiết Thành Viên
-              </CardTitle>
-              <div className="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                {familyMembers.length} người
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-0">
+        {/* Scrollable Table */}
+        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+          <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-slate-100 to-slate-50 border-b border-slate-200 hover:bg-gradient-to-r hover:from-slate-100 hover:to-slate-50">
-                  <TableHead className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Tên</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Tuổi</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Văn Tài</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Võ Tài</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Thương Tài</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Nghệ Tài</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Chiến Lược</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Danh Tiếng</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">May Mắn</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Sự Quyến Rũ</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Sức Khỏe</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Loại Thiên Phú</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Giá Trị Thiên Phú</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Loại Kỹ Năng</TableHead>
-                  <TableHead className="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Giá Trị Kỹ Năng</TableHead>
+                <TableRow className="bg-gray-100">
+                  <TableHead className="px-3 py-2 text-left text-xs font-medium text-gray-700 min-w-[120px]">Tên</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[60px]">Tuổi</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Văn Tài</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Võ Tài</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Thương Tài</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Nghệ Tài</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Chiến Lược</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Danh Tiếng</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">May Mắn</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Quyến Rũ</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[80px]">Sức Khỏe</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[100px]">Loại Thiên Phú</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[90px]">GT Thiên Phú</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[100px]">Loại Kỹ Năng</TableHead>
+                  <TableHead className="px-3 py-2 text-center text-xs font-medium text-gray-700 min-w-[90px]">GT Kỹ Năng</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {familyMembers.map((member, idx) => (
-                  <TableRow key={member.index} className={`transition-colors duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
-                    <TableCell className="px-6 py-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
-                          <span className="text-slate-600 font-semibold text-sm">
+                  <TableRow key={member.index} className={`hover:bg-gray-50 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                    <TableCell className="px-3 py-2">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <span className="text-gray-600 font-medium text-sm">
                             {member.name.charAt(0)}
                           </span>
                         </div>
                         <div>
-                          <div className="font-semibold text-slate-900">{member.name}</div>
-                          <div className="text-xs text-slate-500">Thành viên #{member.index}</div>
+                          <div className="font-medium text-gray-900 text-sm">{member.name}</div>
+                          <div className="text-xs text-gray-500">#{member.index}</div>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
-                        {member.age}
-                      </span>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.literaryTalent}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.martialTalent}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.commercialTalent}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.artisticTalent}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.strategy}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.reputation}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.luck}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.charm}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.health}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {getTalentTypeName(member.talentType)}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.talent}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {getSkillTypeName(member.skillType)}
-                      </div>
-                    </TableCell>
-                    <TableCell className="px-6 py-4 text-center">
-                      <div className="font-medium text-slate-900">
-                        {member.skill}
-                      </div>
-                    </TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm">{member.age}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.literaryTalent}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.martialTalent}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.commercialTalent}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.artisticTalent}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.strategy}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.reputation}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.luck}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.charm}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.health}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm">{getTalentTypeName(member.talentType)}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.talent}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm">{getSkillTypeName(member.skillType)}</TableCell>
+                    <TableCell className="px-3 py-2 text-center text-sm font-medium">{member.skill}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
             
             {familyMembers.length === 0 && (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-2">
+                  <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-600 mb-2">Chưa có thành viên nào</h3>
-                <p className="text-slate-500">Hãy thêm dữ liệu game để hiển thị thông tin thành viên gia đình</p>
+                <h3 className="text-lg font-medium text-gray-600 mb-1">Chưa có thành viên nào</h3>
+                <p className="text-gray-500">Hãy thêm dữ liệu game để hiển thị thông tin thành viên gia đình</p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )
