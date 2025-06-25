@@ -6,7 +6,6 @@ import {
   FamilyMemberEditDialog,
   FamilyMembersLoading,
   FamilyMembersError,
-  PageHeader,
   useFamilyMembersData,
   type FamilyMember
 } from '@/components/family-members'
@@ -41,19 +40,18 @@ export default function FamilyMembersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="max-w-full mx-auto">
-        <PageHeader 
-          title={`Thành Viên Gia Đình (${familyMembers.length} người)`}
-          description="Quản lý thông tin các thành viên trong gia đình"
-        />
-
-        <div className="mt-6">
-          <FamilyMembersTable 
-            familyMembers={familyMembers}
-            onEditMember={handleEditMember}
-          />
+    <div className="container mx-auto p-4 pt-8">
+      <div className="max-w-full">
+        <div className="mb-6 text-center">
+          <p className="text-lg text-slate-600 dark:text-slate-400">
+            Tổng cộng: <span className="font-semibold text-blue-600">{familyMembers.length} thành viên</span>
+          </p>
         </div>
+
+        <FamilyMembersTable 
+          familyMembers={familyMembers}
+          onEditMember={handleEditMember}
+        />
 
         <FamilyMemberEditDialog
           member={editingMember}

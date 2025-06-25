@@ -79,21 +79,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 flex items-center justify-center">
-      <div className="w-full max-w-2xl space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-            Game Tool
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            Tải lên và xử lý file game của bạn một cách dễ dàng
+    <div className="container mx-auto p-4 pt-8">
+      <div className="max-w-2xl mx-auto space-y-6">
+        {/* Info Banner */}
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <p className="text-sm text-blue-700 dark:text-blue-300">
+            💡 <strong>Hướng dẫn:</strong> Upload file <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">GameData.es3</code> để truy cập menu quản lý game với nhiều tính năng hữu ích!
           </p>
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              💡 <strong>Hướng dẫn:</strong> Upload file <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">GameData.es3</code> để truy cập menu quản lý game với nhiều tính năng hữu ích!
-            </p>
-          </div>
         </div>
 
         {/* Upload Area */}

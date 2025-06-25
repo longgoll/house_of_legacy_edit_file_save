@@ -282,9 +282,84 @@ export const useFamilyMembersData = () => {
       const gameDataString = sessionStorage.getItem('gameData')
       if (gameDataString) {
         const gameData = JSON.parse(gameDataString)
-        // Update the specific member in the original data structure
-        // This is a simplified update - in practice you'd need to properly update the nested structure
+        
+        // Find the correct member array structure
+        let memberArray;
+        if (Array.isArray(gameData.Member_now)) {
+          memberArray = gameData.Member_now;
+        } else if (gameData.Member_now.value && Array.isArray(gameData.Member_now.value)) {
+          memberArray = gameData.Member_now.value;
+        } else {
+          console.error('Cannot find member array in gameData structure')
+          return
+        }
+        
+        // Update the specific member at the correct index
+        if (memberArray[updatedMember.index]) {
+          const memberData = memberArray[updatedMember.index]
+          
+          // Handle different possible structures for member data
+          let memberInfo: unknown[];
+          if (Array.isArray(memberData)) {
+            memberInfo = memberData;
+          } else if (memberData && typeof memberData === 'object' && 'value' in memberData) {
+            const memberObj = memberData as { value: unknown };
+            if (Array.isArray(memberObj.value)) {
+              memberInfo = memberObj.value;
+            } else {
+              console.error('Member data value is not an array')
+              return
+            }
+          } else {
+            console.error('Member data has unexpected structure')
+            return
+          }
+          
+          // Helper function to set value (handles both direct values and {value: ...} objects)
+          const setValue = (index: number, newValue: string | number) => {
+            if (memberInfo[index] && typeof memberInfo[index] === 'object' && memberInfo[index] !== null && 'value' in (memberInfo[index] as object)) {
+              (memberInfo[index] as { value: unknown }).value = newValue;
+            } else {
+              memberInfo[index] = newValue;
+            }
+          };
+          
+          // Update the pipe-separated string at index 4 with member info
+          const createPipeString = (member: FamilyMember): string => {
+            return [
+              member.name,                    // 0: name
+              member.generation.toString(),   // 1: generation  
+              member.talentType.toString(),   // 2: talentType
+              member.talent.toString(),       // 3: talent
+              member.gender.toString(),       // 4: gender
+              member.lifespan.toString(),     // 5: lifespan
+              member.skillType.toString(),    // 6: skillType
+              member.luck.toString(),         // 7: luck
+              '',                            // 8: unknown field
+              member.hobby.toString()         // 9: hobby
+            ].join('|');
+          };
+          
+          // Update all the member data fields
+          setValue(4, createPipeString(updatedMember));  // Pipe-separated string with basic info
+          setValue(6, updatedMember.age);                // age
+          setValue(7, updatedMember.literaryTalent);     // literaryTalent
+          setValue(8, updatedMember.martialTalent);      // martialTalent
+          setValue(9, updatedMember.commercialTalent);   // commercialTalent
+          setValue(10, updatedMember.artisticTalent);    // artisticTalent
+          setValue(16, updatedMember.reputation);        // reputation
+          setValue(20, updatedMember.charm);             // charm
+          setValue(21, updatedMember.health);            // health
+          setValue(27, updatedMember.strategy);          // strategy
+          setValue(30, updatedMember.stamina);           // stamina
+          setValue(33, updatedMember.skill);             // skill
+          
+          console.log('Updated member data:', memberInfo)
+        }
+        
+        // Save the updated gameData back to sessionStorage
         sessionStorage.setItem('gameData', JSON.stringify(gameData))
+        console.log('Successfully updated member data in sessionStorage')
       }
     } catch (error) {
       console.error('Error updating sessionStorage:', error)

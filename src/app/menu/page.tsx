@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
-import Link from 'next/link'
+import { Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
 
 interface MenuOption {
   id: string
@@ -137,27 +135,15 @@ export default function MenuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Link href="/">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Quay lại
-              </Button>
-            </Link>
+    <div className="container mx-auto p-6 pt-8">
+      <div className="max-w-4xl mx-auto">
+        {fileName && (
+          <div className="mb-6 text-center">
+            <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 px-4 py-2 rounded-full inline-block border border-green-200 dark:border-green-800">
+              ✓ Đã tải file: {fileName}
+            </div>
           </div>
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">Game Tool Menu</h1>
-            <p className="text-slate-600">Chọn chức năng bạn muốn sử dụng</p>
-            {fileName && (
-              <div className="mt-2 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full inline-block">
-                ✓ Đã tải file: {fileName}
-              </div>
-            )}
-          </div>
-        </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuOptions.map((option) => (

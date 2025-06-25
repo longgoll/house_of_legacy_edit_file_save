@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Copy, Download, Search } from 'lucide-react'
+import { Copy, Download, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import Link from 'next/link'
 
 export default function RawDataPage() {
   const [gameData, setGameData] = useState<Record<string, unknown> | null>(null)
@@ -99,27 +98,15 @@ export default function RawDataPage() {
   const stats = getDataStats()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Link href="/menu">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Quay lại Menu
-              </Button>
-            </Link>
+    <div className="container mx-auto p-6 pt-8">
+      <div className="max-w-6xl mx-auto">
+        {fileName && (
+          <div className="mb-6 text-center">
+            <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 px-4 py-2 rounded-full inline-block border border-green-200 dark:border-green-800">
+              File: {fileName}
+            </div>
           </div>
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">Dữ liệu thô</h1>
-            <p className="text-slate-600">Xem và tương tác với dữ liệu JSON từ file game</p>
-            {fileName && (
-              <div className="mt-2 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full inline-block">
-                File: {fileName}
-              </div>
-            )}
-          </div>
-        </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
