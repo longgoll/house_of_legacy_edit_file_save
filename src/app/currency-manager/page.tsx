@@ -4,6 +4,7 @@ import React from 'react'
 import { CurrencyEditor } from '@/components/currency/CurrencyEditor'
 import { CurrencyDisplay } from '@/components/currency/CurrencyDisplay'
 import { useCurrencyData } from '@/components/currency/useCurrencyData'
+import { ExportButton } from '@/components/ui/export-button'
 
 export default function CurrencyManagerPage() {
   const { money, gold, dataLoaded, updateCurrency } = useCurrencyData()
@@ -22,6 +23,12 @@ export default function CurrencyManagerPage() {
           money={money}
           gold={gold}
         />
+        
+        {dataLoaded && (
+          <div className="flex justify-center">
+            <ExportButton variant="outline" />
+          </div>
+        )}
       </div>
     </div>
   )

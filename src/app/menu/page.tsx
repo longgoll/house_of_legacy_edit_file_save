@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
+import { ExportButton } from '@/components/ui/export-button'
 
 interface MenuOption {
   id: string
@@ -142,6 +143,11 @@ export default function MenuPage() {
             <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 px-4 py-2 rounded-full inline-block border border-green-200 dark:border-green-800">
               ✓ Đã tải file: {fileName}
             </div>
+            {gameData && (
+              <div className="mt-3">
+                <ExportButton className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-200" />
+              </div>
+            )}
           </div>
         )}
 

@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Home, Menu, Coins, Users, FileText, X } from 'lucide-react'
+import { ExportButton } from '@/components/ui/export-button'
 
 interface HeaderProps {
   title?: string
@@ -21,6 +22,31 @@ export function Header({
 }: HeaderProps) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [hasGameData, setHasGameData] = useState(false)
+  
+  useEffect(() => {
+    const checkGameData = () => {
+      const gameData = sessionStorage.getItem('gameData')
+      setHasGameData(!!gameData)
+    }
+    
+    checkGameData()
+    
+    // Listen for sessionStorage changes
+    const handleStorageChange = () => {
+      checkGameData()
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Check periodically in case sessionStorage is modified from same tab
+    const interval = setInterval(checkGameData, 1000)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [])
   
   const getPageInfo = () => {
     switch (pathname) {
@@ -87,6 +113,9 @@ export function Header({
 
           {/* Desktop Action buttons */}
           <div className="hidden md:flex items-center space-x-2">
+            {hasGameData && !isHomePage && (
+              <ExportButton variant="outline" size="sm" />
+            )}
             {!isHomePage && showBackButton && (
               <Link href={isMenuPage ? "/" : "/menu"}>
                 <Button variant="outline" size="sm" className="flex items-center gap-2">
@@ -134,6 +163,11 @@ export function Header({
                 </Link>
               ))}
               <div className="border-t border-slate-200 dark:border-slate-700 pt-2 mt-2 space-y-2">
+                {hasGameData && (
+                  <div className="px-2">
+                    <ExportButton variant="outline" size="sm" className="w-full" />
+                  </div>
+                )}
                 {showBackButton && (
                   <Link href={isMenuPage ? "/" : "/menu"} onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" size="sm" className="w-full justify-start gap-2">

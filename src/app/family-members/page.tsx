@@ -9,6 +9,7 @@ import {
   useFamilyMembersData,
   type FamilyMember
 } from '@/components/family-members'
+import { ExportButton } from '@/components/ui/export-button'
 
 export default function FamilyMembersPage() {
   const { familyMembers, loading, error, updateFamilyMember, reloadData } = useFamilyMembersData()
@@ -42,10 +43,11 @@ export default function FamilyMembersPage() {
   return (
     <div className="container mx-auto p-4 pt-8">
       <div className="max-w-full">
-        <div className="mb-6 text-center">
+        <div className="mb-6 text-center space-y-4">
           <p className="text-lg text-slate-600 dark:text-slate-400">
             Tổng cộng: <span className="font-semibold text-blue-600">{familyMembers.length} thành viên</span>
           </p>
+          <ExportButton variant="outline" size="sm" />
         </div>
 
         <FamilyMembersTable 
