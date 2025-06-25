@@ -1,15 +1,28 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useCallback, useEffect } from "react";
 import { Upload, FileText, X, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { QRSuccessDialog } from "@/components/ui/qr-success-dialog";
+import { BackupWarningDialog } from "@/components/ui/backup-warning-dialog";
 
 export default function Home() {
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const router = useRouter();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [showBackupWarning, setShowBackupWarning] = useState(false);
+
+  // Kiểm tra xem người dùng đã hiểu cảnh báo chưa
+  useEffect(() => {
+    const hasUnderstood = localStorage.getItem('backupWarningUnderstood')
+    if (!hasUnderstood) {
+      // Hiển thị cảnh báo sau 1 giây để trang load xong
+      setTimeout(() => {
+        setShowBackupWarning(true)
+      }, 1000)
+    }
+  }, [])
 
   const handleGameDataFile = useCallback(async (file: File) => {
     try {
@@ -20,13 +33,13 @@ export default function Home() {
       sessionStorage.setItem('gameData', JSON.stringify(gameData));
       sessionStorage.setItem('fileName', file.name);
       
-      // Navigate to menu
-      router.push('/menu');
+      // Show success dialog
+      setShowSuccessDialog(true);
     } catch (error) {
       console.error('Error parsing GameData.es3:', error);
       alert('Error parsing GameData.es3 file. Please make sure it\'s a valid JSON file.');
     }
-  }, [router]);
+  }, []);
 
   const addFiles = useCallback((newFiles: File[]) => {
     setFiles(prev => [...prev, ...newFiles]);
@@ -85,6 +98,9 @@ export default function Home() {
         <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
           <p className="text-sm text-blue-700 dark:text-blue-300">
             💡 <strong>Hướng dẫn:</strong> Upload file <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">GameData.es3</code> để truy cập menu quản lý game với nhiều tính năng hữu ích!
+          </p>
+          <p className="text-sm text-blue-700 dark:text-blue-300">
+            💡 <strong>Hướng dẫn:</strong> file được lưu ở  <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">C:\Users\User\AppData\LocalLow\S3Studio\House of Legacy\FW</code>
           </p>
         </div>
 
@@ -191,6 +207,18 @@ export default function Home() {
             </CardContent>
           </Card>
         )}
+
+        {/* Success Dialog */}
+        <QRSuccessDialog
+          open={showSuccessDialog}
+          onOpenChange={setShowSuccessDialog}
+        />
+
+        {/* Backup Warning Dialog */}
+        <BackupWarningDialog
+          open={showBackupWarning}
+          onOpenChange={setShowBackupWarning}
+        />
       </div>
     </div>
   );

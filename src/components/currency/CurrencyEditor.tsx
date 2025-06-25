@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Edit3, Coins, DollarSign } from 'lucide-react'
+import { QRThankYouDialog } from '@/components/ui/qr-thankyou-dialog'
 
 interface CurrencyEditorProps {
   money: string
@@ -17,6 +18,7 @@ export function CurrencyEditor({ money, gold, onUpdate, dataLoaded }: CurrencyEd
   const [isEditing, setIsEditing] = useState(false)
   const [tempMoney, setTempMoney] = useState(money)
   const [tempGold, setTempGold] = useState(gold)
+  const [showThankYouDialog, setShowThankYouDialog] = useState(false)
 
   // Update temp values when props change
   React.useEffect(() => {
@@ -28,6 +30,7 @@ export function CurrencyEditor({ money, gold, onUpdate, dataLoaded }: CurrencyEd
     if (isEditing) {
       // Save changes
       onUpdate(tempMoney, tempGold)
+      setShowThankYouDialog(true) // Show thank you dialog on save
     } else {
       // Start editing
       setTempMoney(money)
@@ -142,6 +145,14 @@ export function CurrencyEditor({ money, gold, onUpdate, dataLoaded }: CurrencyEd
           </div>
         )}
       </CardContent>
+
+      {/* QR Thank You Dialog */}
+      {showThankYouDialog && (
+        <QRThankYouDialog
+          open={showThankYouDialog}
+          onOpenChange={setShowThankYouDialog}
+        />
+      )}
     </Card>
   )
 }

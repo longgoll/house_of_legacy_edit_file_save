@@ -5,12 +5,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Copy, Download, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { QRDownloadDialog } from '@/components/ui/qr-download-dialog'
 
 export default function RawDataPage() {
   const [gameData, setGameData] = useState<Record<string, unknown> | null>(null)
   const [fileName, setFileName] = useState<string>('')
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [filteredData, setFilteredData] = useState<string>('')
+  const [showQRDialog, setShowQRDialog] = useState(false)
 
   useEffect(() => {
     // Read data from sessionStorage instead of URL parameters
@@ -54,7 +56,7 @@ export default function RawDataPage() {
     }
   }
 
-  const downloadData = () => {
+  const actualDownload = () => {
     const blob = new Blob([filteredData], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -64,6 +66,10 @@ export default function RawDataPage() {
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+  }
+
+  const downloadData = () => {
+    setShowQRDialog(true)
   }
 
   const getDataStats = () => {
@@ -185,6 +191,12 @@ export default function RawDataPage() {
           </CardContent>
         </Card>
       </div>
+      
+      <QRDownloadDialog
+        open={showQRDialog}
+        onOpenChange={setShowQRDialog}
+        onDownload={actualDownload}
+      />
     </div>
   )
 }

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
 import { ExportButton } from '@/components/ui/export-button'
+import { QRWelcomeDialog } from '@/components/ui/qr-welcome-dialog'
 
 interface MenuOption {
   id: string
@@ -24,6 +25,7 @@ interface GameData {
 export default function MenuPage() {
   const [gameData, setGameData] = useState<GameData | null>(null)
   const [fileName, setFileName] = useState<string>('')
+  const [showWelcomeDialog, setShowWelcomeDialog] = useState(false)
 
   useEffect(() => {
     // Read data from sessionStorage instead of URL parameters
@@ -35,6 +37,13 @@ export default function MenuPage() {
         const parsedData = JSON.parse(storedGameData)
         setGameData(parsedData)
         setFileName(storedFileName || 'GameData.es3')
+        
+        // Show welcome dialog if first time visiting menu
+        const hasVisitedMenu = sessionStorage.getItem('hasVisitedMenu')
+        if (!hasVisitedMenu) {
+          setShowWelcomeDialog(true)
+          sessionStorage.setItem('hasVisitedMenu', 'true')
+        }
       } catch (error) {
         console.error('Error parsing stored game data:', error)
       }
@@ -223,6 +232,12 @@ export default function MenuPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Welcome Dialog */}
+        <QRWelcomeDialog 
+          open={showWelcomeDialog} 
+          onOpenChange={setShowWelcomeDialog} 
+        />
       </div>
     </div>
   )

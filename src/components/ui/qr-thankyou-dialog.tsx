@@ -9,32 +9,33 @@ import {
   DialogDescription 
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Download, Coffee, Heart } from 'lucide-react'
+import { Coffee, Heart, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
 
-interface QRDownloadDialogProps {
+interface QRThankYouDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onDownload: () => void
+  title?: string
+  message?: string
 }
 
-const motivationalMessages = [
-  "Cảm ơn bạn đã sử dụng ứng dụng! ☕ Mời bạn ly cà phê để tôi có động lực phát triển thêm nhé!",
-  "Hy vọng ứng dụng hữu ích với bạn! 🎉 Một ly cà phê sẽ giúp tôi tạo ra nhiều tính năng hay ho hơn!",
-  "Bạn thật tuyệt vời! 💪 Hãy mời tôi cà phê để tôi tiếp tục coded những điều thú vị nhé!",
-  "Chúc bạn có trải nghiệm tuyệt vời! ☕ Cà phê sẽ là nguồn động lực để tôi cải thiện ứng dụng!",
-  "Bạn đã hoàn thành xuất file! 🎊 Một ly cà phê nhỏ sẽ giúp tôi có thêm năng lượng phát triển!"
+const thankYouMessages = [
+  "Tuyệt vời! Bạn đã cập nhật thành công! 🎉 Mời tôi cà phê để tôi có thêm động lực nhé!",
+  "Cảm ơn bạn đã sử dụng ứng dụng! ☕ Một ly cà phê sẽ giúp tôi phát triển thêm nhiều tính năng!",
+  "Hoàn thành! Bạn thật tuyệt vời! 💪 Hãy mời tôi cà phê để tôi tiếp tục cải thiện ứng dụng!",
+  "Dữ liệu đã được lưu thành công! 🚀 Cà phê sẽ là nguồn động lực để tôi code thêm tính năng mới!",
+  "Bạn đã hoàn thành xuất sắc! 🌟 Một ly cà phê nhỏ sẽ giúp tôi có thêm năng lượng!"
 ]
 
-export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadDialogProps) {
+export function QRThankYouDialog({ 
+  open, 
+  onOpenChange, 
+  title = "Cảm ơn bạn!", 
+  message 
+}: QRThankYouDialogProps) {
   const [currentMessage] = useState(() => 
-    motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
+    message || thankYouMessages[Math.floor(Math.random() * thankYouMessages.length)]
   )
-
-  const handleDownload = () => {
-    onDownload()
-    onOpenChange(false)
-  }
 
   const handleClose = () => {
     onOpenChange(false)
@@ -43,15 +44,15 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
   return (
     <Dialog open={open} onOpenChange={() => {}} modal>
       <DialogContent 
-        className="sm:max-w-md" 
+        className="sm:max-w-md"
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
         showCloseButton={false}
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-center">
-            <Heart className="h-5 w-5 text-red-500" />
-            Cảm ơn bạn đã sử dụng!
+            <CheckCircle className="h-5 w-5 text-green-500" />
+            {title}
             <Heart className="h-5 w-5 text-red-500" />
           </DialogTitle>
           <DialogDescription className="text-center">
@@ -66,8 +67,8 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
               <Image
                 src="/qr-momo.jpg"
                 alt="QR Code MoMo"
-                width={200}
-                height={200}
+                width={180}
+                height={180}
                 className="rounded"
                 priority
               />
@@ -83,33 +84,24 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
               Quét mã QR để mời tôi một ly cà phê ☕
             </p>
             <p className="text-xs text-muted-foreground italic">
-              Cà phê sẽ giúp tôi có thêm động lực để phát triển những tính năng mới! 🚀
+              Cà phê sẽ giúp tôi có thêm động lực để phát triển! 🚀
             </p>
           </div>
           
-          {/* Download Button */}
-          <div className="w-full pt-4 space-y-2">
-            <Button 
-              onClick={handleDownload}
-              className="w-full bg-green-600 hover:bg-green-700"
-              size="lg"
-            >
-              <Download className="h-4 w-4 mr-2" />
-              Tải file về ngay
-            </Button>
+          {/* Close Button */}
+          <div className="w-full pt-4">
             <Button 
               onClick={handleClose}
-              variant="outline"
-              className="w-full"
-              size="sm"
+              className="w-full bg-blue-600 hover:bg-blue-700"
+              size="lg"
             >
-              Đóng (không tải)
+              Đóng
             </Button>
           </div>
           
           {/* Footer message */}
           <p className="text-xs text-center text-muted-foreground">
-            Dù có mời cà phê hay không, bạn vẫn có thể tải file về! 😊
+            Dù có mời cà phê hay không, tôi vẫn sẽ tiếp tục phát triển! 😊
           </p>
         </div>
       </DialogContent>

@@ -9,31 +9,32 @@ import {
   DialogDescription 
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { Download, Coffee, Heart } from 'lucide-react'
+import { Coffee, Heart, CheckCircle, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
-interface QRDownloadDialogProps {
+interface QRSuccessDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onDownload: () => void
 }
 
-const motivationalMessages = [
-  "Cảm ơn bạn đã sử dụng ứng dụng! ☕ Mời bạn ly cà phê để tôi có động lực phát triển thêm nhé!",
-  "Hy vọng ứng dụng hữu ích với bạn! 🎉 Một ly cà phê sẽ giúp tôi tạo ra nhiều tính năng hay ho hơn!",
-  "Bạn thật tuyệt vời! 💪 Hãy mời tôi cà phê để tôi tiếp tục coded những điều thú vị nhé!",
-  "Chúc bạn có trải nghiệm tuyệt vời! ☕ Cà phê sẽ là nguồn động lực để tôi cải thiện ứng dụng!",
-  "Bạn đã hoàn thành xuất file! 🎊 Một ly cà phê nhỏ sẽ giúp tôi có thêm năng lượng phát triển!"
+const successMessages = [
+  "Upload thành công! 🎉 File đã sẵn sàng để chỉnh sửa! Mời tôi cà phê để có thêm động lực nhé!",
+  "Tuyệt vời! Dữ liệu đã được tải lên! ☕ Một ly cà phê sẽ giúp tôi phát triển thêm tính năng!",
+  "Hoàn thành! Bạn có thể bắt đầu chỉnh sửa game rồi! 💪 Cà phê sẽ giúp tôi code thêm!",
+  "File đã sẵn sàng! Hãy khám phá các tính năng! 🚀 Mời cà phê để tôi làm thêm nhé!"
 ]
 
-export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadDialogProps) {
+export function QRSuccessDialog({ open, onOpenChange }: QRSuccessDialogProps) {
   const [currentMessage] = useState(() => 
-    motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)]
+    successMessages[Math.floor(Math.random() * successMessages.length)]
   )
+  
+  const router = useRouter()
 
-  const handleDownload = () => {
-    onDownload()
+  const handleGoToMenu = () => {
     onOpenChange(false)
+    router.push('/menu')
   }
 
   const handleClose = () => {
@@ -43,15 +44,15 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
   return (
     <Dialog open={open} onOpenChange={() => {}} modal>
       <DialogContent 
-        className="sm:max-w-md" 
+        className="sm:max-w-md"
         onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
         showCloseButton={false}
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-center">
-            <Heart className="h-5 w-5 text-red-500" />
-            Cảm ơn bạn đã sử dụng!
+            <CheckCircle className="h-5 w-5 text-green-500" />
+            Upload thành công!
             <Heart className="h-5 w-5 text-red-500" />
           </DialogTitle>
           <DialogDescription className="text-center">
@@ -62,17 +63,17 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
         <div className="flex flex-col items-center space-y-4">
           {/* QR Code */}
           <div className="relative">
-            <div className="border-4 border-orange-200 rounded-lg p-2 bg-white">
+            <div className="border-4 border-green-200 rounded-lg p-2 bg-white">
               <Image
                 src="/qr-momo.jpg"
                 alt="QR Code MoMo"
-                width={200}
-                height={200}
+                width={180}
+                height={180}
                 className="rounded"
                 priority
               />
             </div>
-            <div className="absolute -top-2 -right-2 bg-orange-500 text-white rounded-full p-1">
+            <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full p-1">
               <Coffee className="h-4 w-4" />
             </div>
           </div>
@@ -80,22 +81,22 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
           {/* Message */}
           <div className="text-center space-y-2">
             <p className="text-sm text-muted-foreground">
-              Quét mã QR để mời tôi một ly cà phê ☕
+              Quét mã QR để ủng hộ nhà phát triển ☕
             </p>
             <p className="text-xs text-muted-foreground italic">
-              Cà phê sẽ giúp tôi có thêm động lực để phát triển những tính năng mới! 🚀
+              Cà phê sẽ giúp tôi có thêm động lực phát triển! 🚀
             </p>
           </div>
           
-          {/* Download Button */}
+          {/* Action Buttons */}
           <div className="w-full pt-4 space-y-2">
             <Button 
-              onClick={handleDownload}
-              className="w-full bg-green-600 hover:bg-green-700"
+              onClick={handleGoToMenu}
+              className="w-full bg-blue-600 hover:bg-blue-700"
               size="lg"
             >
-              <Download className="h-4 w-4 mr-2" />
-              Tải file về ngay
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Vào Menu chính
             </Button>
             <Button 
               onClick={handleClose}
@@ -103,13 +104,13 @@ export function QRDownloadDialog({ open, onOpenChange, onDownload }: QRDownloadD
               className="w-full"
               size="sm"
             >
-              Đóng (không tải)
+              Đóng (ở lại trang này)
             </Button>
           </div>
           
           {/* Footer message */}
           <p className="text-xs text-center text-muted-foreground">
-            Dù có mời cà phê hay không, bạn vẫn có thể tải file về! 😊
+            Bạn có thể vào menu bất cứ lúc nào! 😊
           </p>
         </div>
       </DialogContent>
