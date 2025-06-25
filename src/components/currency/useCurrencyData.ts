@@ -8,7 +8,25 @@ export function useCurrencyData() {
   const [dataLoaded, setDataLoaded] = useState(false)
 
   useEffect(() => {
-    // First try to get data from sessionStorage (from menu)
+    // First try to get data from gameData in sessionStorage
+    const gameDataString = sessionStorage.getItem('gameData')
+    if (gameDataString) {
+      try {
+        const gameData = JSON.parse(gameDataString)
+        if (gameData.CGNum?.value) {
+          const moneyFromGameData = gameData.CGNum.value[0] || '0'
+          const goldFromGameData = gameData.CGNum.value[1] || '0'
+          setMoney(moneyFromGameData)
+          setGold(goldFromGameData)
+          setDataLoaded(true)
+          return
+        }
+      } catch (error) {
+        console.error('Error parsing gameData:', error)
+      }
+    }
+    
+    // Fallback: try to get from individual sessionStorage keys (from menu)
     const storedMoney = sessionStorage.getItem('currentMoney')
     const storedGold = sessionStorage.getItem('currentGold')
     
@@ -17,7 +35,7 @@ export function useCurrencyData() {
       setGold(storedGold)
       setDataLoaded(true)
     } else {
-      // Fallback: try to get from URL parameters (for direct access)
+      // Final fallback: try to get from URL parameters (for direct access)
       const urlParams = new URLSearchParams(window.location.search)
       const moneyParam = urlParams.get('money')
       const goldParam = urlParams.get('gold')
@@ -34,9 +52,34 @@ export function useCurrencyData() {
     setMoney(newMoney)
     setGold(newGold)
     
-    // Update sessionStorage
+    // Update sessionStorage - both individual values and gameData object
     sessionStorage.setItem('currentMoney', newMoney)
     sessionStorage.setItem('currentGold', newGold)
+    
+    // Update gameData object in sessionStorage
+    try {
+      const gameDataString = sessionStorage.getItem('gameData')
+      if (gameDataString) {
+        const gameData = JSON.parse(gameDataString)
+        
+        // Ensure CGNum structure exists
+        if (!gameData.CGNum) {
+          gameData.CGNum = {}
+        }
+        if (!gameData.CGNum.value) {
+          gameData.CGNum.value = ['0', '0']
+        }
+        
+        // Update money and gold values
+        gameData.CGNum.value[0] = newMoney
+        gameData.CGNum.value[1] = newGold
+        
+        // Save updated gameData back to sessionStorage
+        sessionStorage.setItem('gameData', JSON.stringify(gameData))
+      }
+    } catch (error) {
+      console.error('Error updating gameData:', error)
+    }
   }
 
   return {
