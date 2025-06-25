@@ -270,7 +270,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                           max="100"
                           className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 flex-1"
                         />
-                        <span className="text-blue-500 font-bold text-sm min-w-[45px]">{editingMember.literaryTalent}%</span>
+                        <span className="text-blue-500 font-bold text-sm min-w-[45px]">{editingMember.literaryTalent.toFixed(1)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
@@ -295,7 +295,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                           max="100"
                           className="border-red-200 focus:border-red-500 focus:ring-red-500 flex-1"
                         />
-                        <span className="text-red-500 font-bold text-sm min-w-[45px]">{editingMember.martialTalent}%</span>
+                        <span className="text-red-500 font-bold text-sm min-w-[45px]">{editingMember.martialTalent.toFixed(1)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
@@ -320,7 +320,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                           max="100"
                           className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500 flex-1"
                         />
-                        <span className="text-yellow-600 font-bold text-sm min-w-[45px]">{editingMember.commercialTalent}%</span>
+                        <span className="text-yellow-600 font-bold text-sm min-w-[45px]">{editingMember.commercialTalent.toFixed(1)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
@@ -345,7 +345,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                           max="100"
                           className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 flex-1"
                         />
-                        <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.artisticTalent}%</span>
+                        <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.artisticTalent.toFixed(1)}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div 
@@ -390,7 +390,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                             className={`${colorClass} flex-1`}
                           />
                           <span className={`${textColor} font-bold text-sm min-w-[45px]`}>
-                            {editingMember[key as keyof FamilyMember] as number}%
+                            {(editingMember[key as keyof FamilyMember] as number).toFixed(1)}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-1.5">
@@ -449,7 +449,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                               max="100"
                               className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 flex-1"
                             />
-                            <span className="text-orange-500 font-bold text-sm min-w-[45px]">{editingMember.talent}%</span>
+                            <span className="text-orange-500 font-bold text-sm min-w-[45px]">{editingMember.talent.toFixed(1)}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div 
@@ -498,7 +498,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                               max="100"
                               className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 flex-1"
                             />
-                            <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.skill}%</span>
+                            <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.skill.toFixed(1)}%</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div 

@@ -3,19 +3,22 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
+import { FamilyMember } from '@/components/family-members'
 
 interface ExportButtonProps {
   className?: string
   variant?: 'default' | 'outline' | 'secondary' | 'ghost'
   size?: 'default' | 'sm' | 'lg'
   disabled?: boolean
+  familyMembers?: FamilyMember[]
 }
 
 export function ExportButton({ 
   className, 
   variant = 'default', 
   size = 'default',
-  disabled = false 
+  disabled = false,
+  familyMembers
 }: ExportButtonProps) {
   const handleExportFile = () => {
     // Get gameData from sessionStorage
@@ -28,8 +31,32 @@ export function ExportButton({
     }
 
     try {
-      // Parse and re-stringify to ensure proper formatting
+      // Parse gameData
       const gameData = JSON.parse(gameDataString)
+      
+      // Additional validation: ensure sessionStorage data is consistent
+      if (familyMembers && familyMembers.length > 0) {
+        console.log('Validating data consistency before export...')
+        console.log(`Found ${familyMembers.length} family members in component state`)
+        
+        // Check if Member_now exists and has data
+        let memberArray;
+        if (Array.isArray(gameData.Member_now)) {
+          memberArray = gameData.Member_now;
+        } else if (gameData.Member_now?.value && Array.isArray(gameData.Member_now.value)) {
+          memberArray = gameData.Member_now.value;
+        }
+        
+        if (memberArray) {
+          console.log(`Found ${memberArray.length} members in sessionStorage gameData`)
+          
+          if (memberArray.length !== familyMembers.length) {
+            console.warn('Data count mismatch between component state and sessionStorage!')
+          }
+        }
+      }
+      
+      // Format and export data
       const exportData = JSON.stringify(gameData, null, 2)
       
       // Create blob and download
@@ -47,10 +74,11 @@ export function ExportButton({
       document.body.removeChild(link)
       URL.revokeObjectURL(url)
       
+      console.log('Export completed successfully')
       alert('File đã được xuất thành công!')
     } catch (error) {
       console.error('Lỗi khi xuất file:', error)
-      alert('Có lỗi xảy ra khi xuất file!')
+      alert('Có lỗi xảy ra khi xuất file: ' + (error as Error).message)
     }
   }
 

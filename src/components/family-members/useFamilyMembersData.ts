@@ -271,99 +271,167 @@ export const useFamilyMembersData = () => {
   }, [])
 
   const updateFamilyMember = (updatedMember: FamilyMember) => {
+    // Update sessionStorage with new data FIRST
+    try {
+      const gameDataString = sessionStorage.getItem('gameData')
+      if (!gameDataString) {
+        console.error('No gameData found in sessionStorage')
+        return
+      }
+
+      const gameData = JSON.parse(gameDataString)
+      console.log('Original gameData structure:', gameData)
+      
+      // Find the correct member array structure
+      let memberArray;
+      if (Array.isArray(gameData.Member_now)) {
+        memberArray = gameData.Member_now;
+      } else if (gameData.Member_now?.value && Array.isArray(gameData.Member_now.value)) {
+        memberArray = gameData.Member_now.value;
+      } else {
+        console.error('Cannot find member array in gameData structure', {
+          Member_now: gameData.Member_now,
+          isArray: Array.isArray(gameData.Member_now),
+          hasValue: gameData.Member_now?.value,
+          valueIsArray: Array.isArray(gameData.Member_now?.value)
+        })
+        return
+      }
+      
+      console.log(`Attempting to update member at index ${updatedMember.index}, total members: ${memberArray.length}`)
+      
+      // Update the specific member at the correct index
+      if (memberArray[updatedMember.index]) {
+        const memberData = memberArray[updatedMember.index]
+        console.log('Original member data:', memberData)
+        
+        // Handle different possible structures for member data
+        let memberInfo: unknown[];
+        if (Array.isArray(memberData)) {
+          memberInfo = memberData;
+        } else if (memberData && typeof memberData === 'object' && 'value' in memberData) {
+          const memberObj = memberData as { value: unknown };
+          if (Array.isArray(memberObj.value)) {
+            memberInfo = memberObj.value;
+          } else {
+            console.error('Member data value is not an array:', memberObj.value)
+            return
+          }
+        } else {
+          console.error('Member data has unexpected structure:', memberData)
+          return
+        }
+        
+        console.log('Member info array before update:', memberInfo)
+        
+        // Helper function to set value (handles both direct values and {value: ...} objects)
+        const setValue = (index: number, newValue: string | number) => {
+          console.log(`Setting index ${index} to value:`, newValue)
+          
+          if (memberInfo[index] && typeof memberInfo[index] === 'object' && memberInfo[index] !== null && 'value' in (memberInfo[index] as object)) {
+            const oldValue = (memberInfo[index] as { value: unknown }).value;
+            (memberInfo[index] as { value: unknown }).value = newValue;
+            console.log(`Updated object value at index ${index}: ${oldValue} -> ${newValue}`)
+          } else {
+            const oldValue = memberInfo[index];
+            memberInfo[index] = newValue;
+            console.log(`Updated direct value at index ${index}: ${oldValue} -> ${newValue}`)
+          }
+        };
+        
+        // Helper function to get current value (preserves original format)
+        const getCurrentValue = (index: number): string | number => {
+          if (memberInfo[index] && typeof memberInfo[index] === 'object' && memberInfo[index] !== null && 'value' in (memberInfo[index] as object)) {
+            return (memberInfo[index] as { value: unknown }).value as string | number;
+          } else {
+            return memberInfo[index] as string | number;
+          }
+        };
+        
+        // Update the pipe-separated string at index 4 with member info while preserving original structure
+        const updatePipeString = (member: FamilyMember): void => {
+          const currentPipeValue = getCurrentValue(4);
+          
+          if (typeof currentPipeValue === 'string' && currentPipeValue.includes('|')) {
+            // Parse existing pipe string to preserve unknown fields
+            const existingParts = currentPipeValue.split('|');
+            console.log('Existing pipe parts:', existingParts)
+            
+            // Update only the known fields, keep others as they are
+            const updatedParts = [...existingParts]; // Copy existing parts
+            
+            // Update only the fields we know about, preserve others
+            updatedParts[0] = member.name;                    // 0: name
+            updatedParts[1] = member.generation.toString();   // 1: generation  
+            updatedParts[2] = member.talentType.toString();   // 2: talentType
+            updatedParts[3] = member.talent.toString();       // 3: talent
+            updatedParts[4] = member.gender.toString();       // 4: gender
+            updatedParts[5] = member.lifespan.toString();     // 5: lifespan
+            updatedParts[6] = member.skillType.toString();    // 6: skillType
+            updatedParts[7] = member.luck.toString();         // 7: luck
+            // Keep index 8 as is (DON'T MODIFY - preserve original value)
+            if (updatedParts.length > 9) {
+              updatedParts[9] = member.hobby.toString();      // 9: hobby
+            }
+            
+            const updatedPipeString = updatedParts.join('|');
+            console.log('Updated pipe string (preserving all original fields):', updatedPipeString)
+            setValue(4, updatedPipeString);
+          } else {
+            console.warn('Unexpected pipe string format, unable to preserve original data:', currentPipeValue)
+            // In this case, we cannot safely update without losing data
+            // So we'll skip updating the pipe string
+            console.log('Skipping pipe string update to avoid data loss')
+          }
+        };
+        
+        // Update all the member data fields
+        updatePipeString(updatedMember);               // Pipe-separated string with basic info
+        setValue(6, updatedMember.age.toString());                // age (convert to string)
+        setValue(7, updatedMember.literaryTalent.toString());     // literaryTalent (convert to string)
+        setValue(8, updatedMember.martialTalent.toString());      // martialTalent (convert to string)
+        setValue(9, updatedMember.commercialTalent.toString());   // commercialTalent (convert to string)
+        setValue(10, updatedMember.artisticTalent.toString());    // artisticTalent (convert to string)
+        setValue(16, updatedMember.reputation.toString());        // reputation (convert to string)
+        setValue(20, updatedMember.charm.toString());             // charm (convert to string)
+        setValue(21, updatedMember.health.toString());            // health (convert to string)
+        setValue(27, updatedMember.strategy.toString());          // strategy (convert to string)
+        setValue(30, updatedMember.stamina.toString());           // stamina (convert to string)
+        setValue(33, updatedMember.skill.toString());             // skill (convert to string)
+        
+        console.log('Member info array after update:', memberInfo)
+        console.log('Updated member data structure:', memberData)
+        
+        // Save the updated gameData back to sessionStorage
+        const updatedGameDataString = JSON.stringify(gameData)
+        sessionStorage.setItem('gameData', updatedGameDataString)
+        console.log('Successfully saved updated member data to sessionStorage')
+        
+        // Verify the save was successful
+        const verifyData = sessionStorage.getItem('gameData')
+        if (verifyData) {
+          const verifyParsed = JSON.parse(verifyData)
+          console.log('Verification - saved data contains updated member:', 
+            verifyParsed.Member_now?.[updatedMember.index] || verifyParsed.Member_now?.value?.[updatedMember.index])
+        }
+        
+      } else {
+        console.error(`Member at index ${updatedMember.index} not found in array of length ${memberArray.length}`)
+        return
+      }
+      
+    } catch (error) {
+      console.error('Error updating sessionStorage:', error)
+      return
+    }
+    
+    // Update local state AFTER successful sessionStorage update
     setFamilyMembers(prev => 
       prev.map(member => 
         member.index === updatedMember.index ? updatedMember : member
       )
     )
-    
-    // Update sessionStorage with new data
-    try {
-      const gameDataString = sessionStorage.getItem('gameData')
-      if (gameDataString) {
-        const gameData = JSON.parse(gameDataString)
-        
-        // Find the correct member array structure
-        let memberArray;
-        if (Array.isArray(gameData.Member_now)) {
-          memberArray = gameData.Member_now;
-        } else if (gameData.Member_now.value && Array.isArray(gameData.Member_now.value)) {
-          memberArray = gameData.Member_now.value;
-        } else {
-          console.error('Cannot find member array in gameData structure')
-          return
-        }
-        
-        // Update the specific member at the correct index
-        if (memberArray[updatedMember.index]) {
-          const memberData = memberArray[updatedMember.index]
-          
-          // Handle different possible structures for member data
-          let memberInfo: unknown[];
-          if (Array.isArray(memberData)) {
-            memberInfo = memberData;
-          } else if (memberData && typeof memberData === 'object' && 'value' in memberData) {
-            const memberObj = memberData as { value: unknown };
-            if (Array.isArray(memberObj.value)) {
-              memberInfo = memberObj.value;
-            } else {
-              console.error('Member data value is not an array')
-              return
-            }
-          } else {
-            console.error('Member data has unexpected structure')
-            return
-          }
-          
-          // Helper function to set value (handles both direct values and {value: ...} objects)
-          const setValue = (index: number, newValue: string | number) => {
-            if (memberInfo[index] && typeof memberInfo[index] === 'object' && memberInfo[index] !== null && 'value' in (memberInfo[index] as object)) {
-              (memberInfo[index] as { value: unknown }).value = newValue;
-            } else {
-              memberInfo[index] = newValue;
-            }
-          };
-          
-          // Update the pipe-separated string at index 4 with member info
-          const createPipeString = (member: FamilyMember): string => {
-            return [
-              member.name,                    // 0: name
-              member.generation.toString(),   // 1: generation  
-              member.talentType.toString(),   // 2: talentType
-              member.talent.toString(),       // 3: talent
-              member.gender.toString(),       // 4: gender
-              member.lifespan.toString(),     // 5: lifespan
-              member.skillType.toString(),    // 6: skillType
-              member.luck.toString(),         // 7: luck
-              '',                            // 8: unknown field
-              member.hobby.toString()         // 9: hobby
-            ].join('|');
-          };
-          
-          // Update all the member data fields
-          setValue(4, createPipeString(updatedMember));  // Pipe-separated string with basic info
-          setValue(6, updatedMember.age);                // age
-          setValue(7, updatedMember.literaryTalent);     // literaryTalent
-          setValue(8, updatedMember.martialTalent);      // martialTalent
-          setValue(9, updatedMember.commercialTalent);   // commercialTalent
-          setValue(10, updatedMember.artisticTalent);    // artisticTalent
-          setValue(16, updatedMember.reputation);        // reputation
-          setValue(20, updatedMember.charm);             // charm
-          setValue(21, updatedMember.health);            // health
-          setValue(27, updatedMember.strategy);          // strategy
-          setValue(30, updatedMember.stamina);           // stamina
-          setValue(33, updatedMember.skill);             // skill
-          
-          console.log('Updated member data:', memberInfo)
-        }
-        
-        // Save the updated gameData back to sessionStorage
-        sessionStorage.setItem('gameData', JSON.stringify(gameData))
-        console.log('Successfully updated member data in sessionStorage')
-      }
-    } catch (error) {
-      console.error('Error updating sessionStorage:', error)
-    }
+    console.log('Local state updated successfully')
   }
 
   return {

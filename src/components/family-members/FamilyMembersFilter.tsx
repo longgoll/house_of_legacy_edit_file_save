@@ -88,7 +88,11 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
               <SelectItem value="3">Thế hệ 3</SelectItem>
               <SelectItem value="4">Thế hệ 4</SelectItem>
               <SelectItem value="5">Thế hệ 5</SelectItem>
-              <SelectItem value="6">Thế hệ 6+</SelectItem>
+              <SelectItem value="6">Thế hệ 6</SelectItem>
+              <SelectItem value="7">Thế hệ 7</SelectItem>
+              <SelectItem value="8">Thế hệ 8</SelectItem>
+              <SelectItem value="9">Thế hệ 9</SelectItem>
+              <SelectItem value="10">Thế hệ 10</SelectItem>
             </SelectContent>
           </Select>
 
