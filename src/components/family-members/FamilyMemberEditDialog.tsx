@@ -9,6 +9,13 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { FamilyMember } from './useFamilyMembersData'
 
 interface FamilyMemberEditDialogProps {
@@ -39,6 +46,16 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
     setEditingMember(prev => prev ? {
       ...prev,
       [field]: isNaN(numValue) ? 0 : numValue
+    } : null)
+  }
+
+  const handleSelectChange = (field: keyof FamilyMember, value: string) => {
+    if (!editingMember) return
+    
+    const numValue = Number(value)
+    setEditingMember(prev => prev ? {
+      ...prev,
+      [field]: numValue
     } : null)
   }
 
@@ -295,17 +312,18 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
               {/* Talent Type */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Loại Thiên Phú</label>
-                <Input
-                  type="number"
-                  value={editingMember.talentType}
-                  onChange={(e) => handleInputChange('talentType', e.target.value)}
-                  min="0"
-                  max="10"
-                  className="w-full"
-                />
-                <div className="text-xs text-gray-500">
-                  0: Không có, 1: Văn tài, 2: Võ tài, 3: Thương tài, 4: Nghệ tài
-                </div>
+                <Select value={editingMember.talentType.toString()} onValueChange={(value) => handleSelectChange('talentType', value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Chọn loại thiên phú" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Không có</SelectItem>
+                    <SelectItem value="1">Văn tài</SelectItem>
+                    <SelectItem value="2">Võ tài</SelectItem>
+                    <SelectItem value="3">Thương tài</SelectItem>
+                    <SelectItem value="4">Nghệ tài</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Talent Value */}
@@ -324,17 +342,20 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
               {/* Skill Type */}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Loại Kỹ Năng</label>
-                <Input
-                  type="number"
-                  value={editingMember.skillType}
-                  onChange={(e) => handleInputChange('skillType', e.target.value)}
-                  min="0"
-                  max="10"
-                  className="w-full"
-                />
-                <div className="text-xs text-gray-500">
-                  0: Không có, 1: Đạo pháp, 2: Y học, 3: Vận may, 4: Bói toán, 5: Quyến rũ, 6: Thủ công
-                </div>
+                <Select value={editingMember.skillType.toString()} onValueChange={(value) => handleSelectChange('skillType', value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Chọn loại kỹ năng" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Không có</SelectItem>
+                    <SelectItem value="1">Đạo pháp</SelectItem>
+                    <SelectItem value="2">Y học</SelectItem>
+                    <SelectItem value="3">Vận may</SelectItem>
+                    <SelectItem value="4">Bói toán</SelectItem>
+                    <SelectItem value="5">Sự quyến rũ</SelectItem>
+                    <SelectItem value="6">Thủ công</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Skill Value */}
