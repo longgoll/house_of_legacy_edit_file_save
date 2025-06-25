@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
 import { FamilyMember } from '@/components/family-members'
+import { QRDownloadDialog } from '@/components/ui/qr-download-dialog'
 
 interface ExportButtonProps {
   className?: string
@@ -20,7 +21,9 @@ export function ExportButton({
   disabled = false,
   familyMembers
 }: ExportButtonProps) {
-  const handleExportFile = () => {
+  const [showQRDialog, setShowQRDialog] = useState(false)
+
+  const actualDownload = () => {
     // Get gameData from sessionStorage
     const gameDataString = sessionStorage.getItem('gameData')
     const fileName = sessionStorage.getItem('fileName') || 'GameData_modified.es3'
@@ -82,16 +85,29 @@ export function ExportButton({
     }
   }
 
+  const handleExportFile = () => {
+    // Show QR dialog first
+    setShowQRDialog(true)
+  }
+
   return (
-    <Button 
-      onClick={handleExportFile}
-      variant={variant}
-      size={size}
-      className={className}
-      disabled={disabled}
-    >
-      <Download className="h-4 w-4" />
-      Xuất file đã chỉnh sửa
-    </Button>
+    <>
+      <Button 
+        onClick={handleExportFile}
+        variant={variant}
+        size={size}
+        className={className}
+        disabled={disabled}
+      >
+        <Download className="h-4 w-4" />
+        Xuất file đã chỉnh sửa
+      </Button>
+      
+      <QRDownloadDialog
+        open={showQRDialog}
+        onOpenChange={setShowQRDialog}
+        onDownload={actualDownload}
+      />
+    </>
   )
 }
