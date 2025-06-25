@@ -52,11 +52,27 @@ export default function MenuPage() {
       available: true
     },
     {
-      id: 'family',
-      title: 'Quản lý gia tộc',
-      description: 'Quản lý thành viên và thông tin gia tộc',
+      id: 'family-members',
+      title: 'Thành viên gia đình',
+      description: 'Quản lý các thành viên trực hệ trong gia đình',
       icon: <Users className="h-6 w-6" />,
-      href: '/family-management',
+      href: '/family-members',
+      available: true
+    },
+    {
+      id: 'married-relatives',
+      title: 'Người thân kết hôn',
+      description: 'Quản lý những người thân đã kết hôn hoặc đang kết hôn',
+      icon: <Crown className="h-6 w-6" />,
+      href: '/married-relatives',
+      available: false
+    },
+    {
+      id: 'servants',
+      title: 'Người hầu cận',
+      description: 'Quản lý những người hầu và cận thần trong gia tộc',
+      icon: <Shield className="h-6 w-6" />,
+      href: '/servants',
       available: false
     },
     {
@@ -69,9 +85,9 @@ export default function MenuPage() {
     },
     {
       id: 'character',
-      title: 'Quản lý nhân vật',
-      description: 'Chỉnh sửa thông tin và thuộc tính nhân vật',
-      icon: <Crown className="h-6 w-6" />,
+      title: 'Quản lý nhân vật chính',
+      description: 'Chỉnh sửa thông tin và thuộc tính nhân vật chính',
+      icon: <Sword className="h-6 w-6" />,
       href: '/character-management',
       available: false
     },
@@ -79,7 +95,7 @@ export default function MenuPage() {
       id: 'equipment',
       title: 'Quản lý trang bị',
       description: 'Quản lý vũ khí, áo giáp và trang bị',
-      icon: <Sword className="h-6 w-6" />,
+      icon: <Settings className="h-6 w-6" />,
       href: '/equipment-management',
       available: false
     },
@@ -87,7 +103,7 @@ export default function MenuPage() {
       id: 'skills',
       title: 'Quản lý kỹ năng',
       description: 'Chỉnh sửa kỹ năng và khả năng đặc biệt',
-      icon: <Shield className="h-6 w-6" />,
+      icon: <Crown className="h-6 w-6" />,
       href: '/skills-management',
       available: false
     },
