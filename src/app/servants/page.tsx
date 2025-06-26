@@ -1,14 +1,26 @@
 'use client'
 
-import React from 'react'
-import { ServantsTable, useServantsData, ServantsData } from '@/components/servants'
+import React, { useState } from 'react'
+import { ServantsTable, ServantsEditDialog, useServantsData, ServantsData } from '@/components/servants'
 
 export default function ServantsPage() {
-  const { servants, loading, error } = useServantsData()
+  const { servants, loading, error, updateServant } = useServantsData()
+  const [editingServant, setEditingServant] = useState<ServantsData | null>(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   const handleEditServant = (servant: ServantsData) => {
-    console.log('Edit servant:', servant)
-    // TODO: Implement edit functionality when ServantEditDialog is created
+    setEditingServant(servant)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleCloseDialog = () => {
+    setIsEditDialogOpen(false)
+    setEditingServant(null)
+  }
+
+  const handleSaveServant = (updatedServant: ServantsData) => {
+    updateServant(updatedServant)
+    handleCloseDialog()
   }
 
   if (loading) {
@@ -117,13 +129,12 @@ export default function ServantsPage() {
         onEditServant={handleEditServant}
       />
 
-      {/* TODO: Create ServantEditDialog component when needed */}
-      {/* <ServantEditDialog
+      <ServantsEditDialog
         servant={editingServant}
         isOpen={isEditDialogOpen}
         onClose={handleCloseDialog}
         onSave={handleSaveServant}
-      /> */}
+      />
     </div>
   )
 }
