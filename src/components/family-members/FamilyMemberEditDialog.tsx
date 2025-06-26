@@ -368,6 +368,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                 <CardContent>
                   <div className="grid grid-cols-3 gap-4">
                     {[
+                      { key: 'mood', label: 'Tâm Trạng', icon: '😊', colorClass: 'border-cyan-200 focus:border-cyan-500 focus:ring-cyan-500', textColor: 'text-cyan-500', bgColor: 'bg-cyan-500' },
                       { key: 'strategy', label: 'Chiến Lược', icon: '🧠', colorClass: 'border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500', textColor: 'text-indigo-500', bgColor: 'bg-indigo-500' },
                       { key: 'reputation', label: 'Danh Tiếng', icon: '⭐', colorClass: 'border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500', textColor: 'text-yellow-600', bgColor: 'bg-yellow-500' },
                       { key: 'luck', label: 'May Mắn', icon: '🍀', colorClass: 'border-green-200 focus:border-green-500 focus:ring-green-500', textColor: 'text-green-500', bgColor: 'bg-green-500' },
