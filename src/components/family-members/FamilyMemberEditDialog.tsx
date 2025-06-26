@@ -253,18 +253,25 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                         <span className="w-1 h-4 bg-green-500 rounded-full"></span>
                         Sở thích
                       </label>
-                      <Input
-                        type="number"
-                        value={editingMember.hobby}
-                        onChange={(e) => handleInputChange('hobby', e.target.value)}
-                        min="0"
-                        max="10"
-                        className="border-green-200 focus:border-green-500 focus:ring-green-500"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Min: 0</span>
-                        <span>Chưa xác định</span>
-                        <span>Max: 10</span>
+                      <Select value={editingMember.hobby.toString()} onValueChange={(value) => handleSelectChange('hobby', value)}>
+                        <SelectTrigger className="border-green-200 focus:border-green-500">
+                          <SelectValue placeholder="Chọn sở thích" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="0">Hương phấn</SelectItem>
+                          <SelectItem value="1">Mực</SelectItem>
+                          <SelectItem value="2">Hội họa</SelectItem>
+                          <SelectItem value="3">Đồ cổ</SelectItem>
+                          <SelectItem value="4">Bộ trà</SelectItem>
+                          <SelectItem value="5">Hương</SelectItem>
+                          <SelectItem value="6">Bình</SelectItem>
+                          <SelectItem value="7">Rượu</SelectItem>
+                          <SelectItem value="8">Âm nhạc</SelectItem>
+                          <SelectItem value="9">Da</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-gray-500">
+                        Chọn sở thích phù hợp cho thành viên
                       </div>
                     </div>
                   </div>
