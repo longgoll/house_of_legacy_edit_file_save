@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
+import { Coins, Users, Settings, FileText, Crown, Shield, Sword, Package } from 'lucide-react'
 import { ExportButton } from '@/components/ui/export-button'
 import { QRWelcomeDialog } from '@/components/ui/qr-welcome-dialog'
 
@@ -88,8 +88,16 @@ export default function MenuPage() {
       title: 'Quản lý kho đồ',
       description: 'Chỉnh sửa thông tin kho đồ',
       icon: <Sword className="h-6 w-6" />,
-      href: '/character-management',
+      href: '/character-manager',
       available: false
+    },
+    {
+      id: 'item-manager',
+      title: 'Tra cứu vật phẩm',
+      description: 'Tra cứu thông tin vật phẩm theo ID hoặc tên',
+      icon: <Package className="h-6 w-6" />,
+      href: '/item-manager',
+      available: true
     },
     {
       id: 'family-info',
@@ -121,6 +129,9 @@ export default function MenuPage() {
       // Store currency data for currency-manager page
       sessionStorage.setItem('currentMoney', money)
       sessionStorage.setItem('currentGold', gold)
+      window.location.href = option.href
+    } else if (option.id === 'item-manager') {
+      // Item manager doesn't need game data, go directly
       window.location.href = option.href
     } else {
       // For other pages, data is already in sessionStorage
