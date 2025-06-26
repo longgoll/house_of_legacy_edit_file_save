@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { getItemName, searchItems } from '@/data/items'
 import { PlusIcon, EditIcon, TrashIcon, SearchIcon, RefreshCwIcon } from 'lucide-react'
 
+// Define the props for the EditDialog component
 interface EditDialogProps {
   item: InventoryItem | null
   isOpen: boolean
