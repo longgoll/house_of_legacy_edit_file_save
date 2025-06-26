@@ -1,10 +1,19 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ServantsTable, ServantsEditDialog, useServantsData, ServantsData } from '@/components/servants'
+import { ServantsTable, ServantsEditDialog, ServantsFilter, useServantsData, useFilteredServants, ServantsData } from '@/components/servants'
 
 export default function ServantsPage() {
   const { servants, loading, error, updateServant } = useServantsData()
+  const {
+    filters,
+    setFilters,
+    filteredServants,
+    resetFilters,
+    totalCount,
+    filteredCount
+  } = useFilteredServants(servants)
+  
   const [editingServant, setEditingServant] = useState<ServantsData | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
@@ -53,15 +62,14 @@ export default function ServantsPage() {
   }
 
   // Calculate statistics
-  const totalCount = servants.length
-  const femaleCount = servants.filter(s => s.gender === 0).length
-  const maleCount = servants.filter(s => s.gender === 1).length
-  const averageAge = servants.length > 0 
-    ? Math.round(servants.reduce((sum, s) => sum + s.age, 0) / servants.length)
+  const femaleCount = filteredServants.filter(s => s.gender === 0).length
+  const maleCount = filteredServants.filter(s => s.gender === 1).length
+  const averageAge = filteredServants.length > 0 
+    ? Math.round(filteredServants.reduce((sum, s) => sum + s.age, 0) / filteredServants.length)
     : 0
-  const totalSalary = servants.reduce((sum, s) => sum + s.monthlySalary, 0)
-  const averageSalary = servants.length > 0 
-    ? Math.round(totalSalary / servants.length)
+  const totalSalary = filteredServants.reduce((sum, s) => sum + s.monthlySalary, 0)
+  const averageSalary = filteredServants.length > 0 
+    ? Math.round(totalSalary / filteredServants.length)
     : 0
 
   // Format salary for display
@@ -89,8 +97,8 @@ export default function ServantsPage() {
         <div className="bg-gradient-to-r from-emerald-100 to-teal-100 rounded-xl p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-600">{totalCount}</div>
-              <div className="text-sm text-emerald-700 font-medium">Tổng số hầu</div>
+              <div className="text-3xl font-bold text-emerald-600">{filteredCount}</div>
+              <div className="text-sm text-emerald-700 font-medium">Hiển thị / {totalCount} hầu</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-pink-600">{femaleCount}</div>
@@ -124,8 +132,16 @@ export default function ServantsPage() {
         </div>
       </div>
 
+      <ServantsFilter
+        filters={filters}
+        onFiltersChange={setFilters}
+        onReset={resetFilters}
+        memberCount={totalCount}
+        filteredCount={filteredCount}
+      />
+
       <ServantsTable 
-        servants={servants}
+        servants={filteredServants}
         onEditServant={handleEditServant}
       />
 
