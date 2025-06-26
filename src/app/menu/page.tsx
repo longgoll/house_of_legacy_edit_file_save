@@ -77,11 +77,11 @@ export default function MenuPage() {
     },
     {
       id: 'servants',
-      title: 'Người hầu cận',
-      description: 'Quản lý những người hầu và cận thần trong gia tộc',
+      title: 'Môn khách',
+      description: 'Quản lý các môn khách',
       icon: <Shield className="h-6 w-6" />,
       href: '/servants',
-      available: false
+      available: true
     },
     {
       id: 'family-info',
