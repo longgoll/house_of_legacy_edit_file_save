@@ -48,6 +48,26 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
     return gender === 0 ? 'Nữ' : 'Nam';
   };
 
+  const getExamTitleName = (title: number): string => {
+    switch (title) {
+      case 0: return 'Không có';
+      case 1: return 'Tú Tài';
+      case 2: return 'Cử nhân';
+      case 3: return 'Giải nguyên';
+      case 4: return 'Cống Sĩ';
+      case 5: return 'Hội nguyên';
+      case 6: return 'Tiến Sĩ';
+      case 7: return 'Thám hoa';
+      case 8: return 'Bảng nhãn';
+      case 9: return 'Trạng Nguyên';
+      default: return 'Không rõ';
+    }
+  };
+
+  const getPatriarchName = (isPatriarch: number): string => {
+    return isPatriarch === 1 ? 'Tộc trưởng' : 'Thành viên';
+  };
+
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
@@ -101,7 +121,19 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                         }`}>
                           {getGenderName(member.gender)}
                         </span>
+                        {member.isPatriarch === 1 && (
+                          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full font-medium">
+                            👑 {getPatriarchName(member.isPatriarch)}
+                          </span>
+                        )}
                       </div>
+                      {member.examTitle > 0 && (
+                        <div className="mt-2">
+                          <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">
+                            🎓 {getExamTitleName(member.examTitle)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </TableCell>
