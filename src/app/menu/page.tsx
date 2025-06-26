@@ -73,7 +73,7 @@ export default function MenuPage() {
       description: 'Quản lý những người thân đã kết hôn hoặc đang kết hôn',
       icon: <Crown className="h-6 w-6" />,
       href: '/married-relatives',
-      available: false
+      available: true
     },
     {
       id: 'servants',
