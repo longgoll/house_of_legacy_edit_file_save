@@ -1,15 +1,28 @@
 'use client'
 
-import React from 'react'
-import { MarriedRelativesTable } from '@/components/married-relatives'
+import React, { useState } from 'react'
+import { MarriedRelativesTable, MarriedRelativeEditDialog } from '@/components/married-relatives'
 import { useMemberQuData, useMarriedRelativesData } from '@/components/married-relatives/useMarriedRelativesData'
 
 export default function MarriedRelativesPage() {
-  const { memberQu: marriedRelatives, loading, error } = useMemberQuData()
+  const { memberQu: marriedRelatives, loading, error, updateMemberQu } = useMemberQuData()
+  const [editingMember, setEditingMember] = useState<useMarriedRelativesData | null>(null)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   const handleEditMember = (member: useMarriedRelativesData) => {
-    // You can implement an edit dialog here similar to family members
-    console.log('Editing married relative:', member)
+    setEditingMember(member)
+    setIsEditDialogOpen(true)
+  }
+
+  const handleSaveMember = (updatedMember: useMarriedRelativesData) => {
+    updateMemberQu(updatedMember)
+    setIsEditDialogOpen(false)
+    setEditingMember(null)
+  }
+
+  const handleCloseDialog = () => {
+    setIsEditDialogOpen(false)
+    setEditingMember(null)
   }
 
   if (loading) {
@@ -87,6 +100,13 @@ export default function MarriedRelativesPage() {
       <MarriedRelativesTable 
         marriedRelatives={marriedRelatives}
         onEditMember={handleEditMember}
+      />
+
+      <MarriedRelativeEditDialog
+        member={editingMember}
+        isOpen={isEditDialogOpen}
+        onClose={handleCloseDialog}
+        onSave={handleSaveMember}
       />
     </div>
   )

@@ -145,7 +145,7 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
                     <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
                       <div className="text-xs text-orange-600 font-semibold mb-1">🎯 Kỹ năng</div>
                       <div className="text-sm font-bold text-orange-800">{getSkillTypeName(member.skillType)}</div>
-                      <div className="text-lg font-bold text-orange-900 mt-1">{member.skillType}</div>
+                      <div className="text-lg font-bold text-orange-900 mt-1">{member.skill}</div>
                     </div>
                   </div>
                 </TableCell>

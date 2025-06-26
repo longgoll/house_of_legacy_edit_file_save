@@ -22,6 +22,7 @@ export interface useMarriedRelativesData {
   charm: number // From index 15 - Mị lực
   health: number // From index 16
   strategy: number // From index 19 - Mưu lượt
+  skill: number // From index 23 - Giá trị kỹ năng
 }
 
 export const useMemberQuData = () => {
@@ -169,6 +170,7 @@ export const useMemberQuData = () => {
           charm: Number(getValue(memberInfo[15])) || 0,
           health: Number(getValue(memberInfo[16])) || 0,
           strategy: Number(getValue(memberInfo[19])) || 0,
+          skill: Number(getValue(memberInfo[23])) || 0, // Giá trị kỹ năng từ index 23
         }
       }).filter((member: useMarriedRelativesData | null): member is useMarriedRelativesData => member !== null)
 
@@ -332,6 +334,7 @@ export const useMemberQuData = () => {
         setValue(15, updatedMember.charm.toString());          // charm (convert to string)
         setValue(16, updatedMember.health.toString());         // health (convert to string)
         setValue(19, updatedMember.strategy.toString());       // strategy (convert to string)
+        setValue(23, updatedMember.skill.toString());          // skill (convert to string) - Giá trị kỹ năng
         
         console.log('Member_qu info array after update:', memberInfo)
         console.log('Updated member_qu data structure:', memberData)
