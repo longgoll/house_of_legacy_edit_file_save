@@ -10,7 +10,7 @@ const DEFAULT_FILTERS: FilterState = {
   skillType: 'all',
   minAge: '',
   maxAge: '',
-  sortBy: 'name',
+  sortBy: 'index',
   sortOrder: 'asc'
 }
 

@@ -1,13 +1,28 @@
 'use client'
 
 import React, { useState } from 'react'
-import { MarriedRelativesTable, MarriedRelativeEditDialog } from '@/components/married-relatives'
+import { 
+  MarriedRelativesTable, 
+  MarriedRelativeEditDialog, 
+  MarriedRelativesFilter,
+  useFilteredMarriedRelatives
+} from '@/components/married-relatives'
 import { useMemberQuData, useMarriedRelativesData } from '@/components/married-relatives/useMarriedRelativesData'
 
 export default function MarriedRelativesPage() {
   const { memberQu: marriedRelatives, loading, error, updateMemberQu } = useMemberQuData()
   const [editingMember, setEditingMember] = useState<useMarriedRelativesData | null>(null)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+
+  // Use the filtering hook
+  const {
+    filters,
+    setFilters,
+    filteredRelatives,
+    resetFilters,
+    totalCount,
+    filteredCount
+  } = useFilteredMarriedRelatives(marriedRelatives)
 
   const handleEditMember = (member: useMarriedRelativesData) => {
     setEditingMember(member)
@@ -69,25 +84,25 @@ export default function MarriedRelativesPage() {
         <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-6 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">{marriedRelatives.length}</div>
+              <div className="text-3xl font-bold text-purple-600">{totalCount}</div>
               <div className="text-sm text-purple-700 font-medium">Tổng số thành viên</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-pink-600">
-                {marriedRelatives.filter(m => m.gender === 0).length}
+                {filteredRelatives.filter(m => m.gender === 0).length}
               </div>
-              <div className="text-sm text-pink-700 font-medium">Nữ giới</div>
+              <div className="text-sm text-pink-700 font-medium">Nữ giới (đang hiển thị)</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600">
-                {marriedRelatives.filter(m => m.gender === 1).length}
+                {filteredRelatives.filter(m => m.gender === 1).length}
               </div>
-              <div className="text-sm text-blue-700 font-medium">Nam giới</div>
+              <div className="text-sm text-blue-700 font-medium">Nam giới (đang hiển thị)</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-green-600">
-                {marriedRelatives.length > 0 
-                  ? Math.round(marriedRelatives.reduce((sum, m) => sum + m.age, 0) / marriedRelatives.length)
+                {filteredRelatives.length > 0 
+                  ? Math.round(filteredRelatives.reduce((sum, m) => sum + m.age, 0) / filteredRelatives.length)
                   : 0
                 }
               </div>
@@ -97,8 +112,17 @@ export default function MarriedRelativesPage() {
         </div>
       </div>
 
+      {/* Filter Component */}
+      <MarriedRelativesFilter
+        filters={filters}
+        onFiltersChange={setFilters}
+        onReset={resetFilters}
+        memberCount={totalCount}
+        filteredCount={filteredCount}
+      />
+
       <MarriedRelativesTable 
-        marriedRelatives={marriedRelatives}
+        marriedRelatives={filteredRelatives}
         onEditMember={handleEditMember}
       />
 
