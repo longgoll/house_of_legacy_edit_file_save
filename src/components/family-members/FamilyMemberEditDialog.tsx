@@ -66,14 +66,39 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
     }
   }
 
+  const handleMaxAllTalents = () => {
+    if (!editingMember) return
+    setEditingMember(prev => prev ? {
+      ...prev,
+      literaryTalent: 100,
+      martialTalent: 100,
+      commercialTalent: 100,
+      artisticTalent: 100
+    } : null)
+  }
+
+  const handleMaxAllAttributes = () => {
+    if (!editingMember) return
+    setEditingMember(prev => prev ? {
+      ...prev,
+      mood: 100,
+      strategy: 100,
+      reputation: 100,
+      luck: 100,
+      charm: 100,
+      health: 100,
+      stamina: 100
+    } : null)
+  }
+
   if (!editingMember) {
     return null
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-        <DialogHeader className="pb-4 border-b border-gray-100">
+      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col">
+        <DialogHeader className="pb-4 border-b border-gray-100 flex-shrink-0">
           <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
               {editingMember.name.charAt(0)}
@@ -87,8 +112,8 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="basic" className="flex-1 overflow-hidden">
-          <TabsList className="grid w-full grid-cols-4 mb-6">
+        <Tabs defaultValue="basic" className="flex-1 flex flex-col min-h-0">
+          <TabsList className="grid w-full grid-cols-4 mb-4 flex-shrink-0">
             <TabsTrigger value="basic" className="flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               Thông tin cơ bản
@@ -107,7 +132,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
             </TabsTrigger>
           </TabsList>
 
-          <div className="overflow-y-auto max-h-[calc(90vh-200px)]">
+          <div className="flex-1 overflow-y-auto min-h-0">
             <TabsContent value="basic" className="space-y-6">
               <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
                 <CardHeader>
@@ -250,8 +275,19 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
             <TabsContent value="talents" className="space-y-6">
               <Card className="border-0 shadow-sm bg-gradient-to-r from-green-50 to-emerald-50">
                 <CardHeader>
-                  <CardTitle className="text-lg text-green-900">Tài năng chính</CardTitle>
-                  <CardDescription>Các loại tài năng cơ bản của thành viên</CardDescription>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-lg text-green-900">Tài năng chính</CardTitle>
+                      <CardDescription>Các loại tài năng cơ bản của thành viên</CardDescription>
+                    </div>
+                    <Button
+                      onClick={handleMaxAllTalents}
+                      className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
+                    >
+                      <span className="mr-2">🚀</span>
+                      Full 100
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-6">
@@ -326,8 +362,19 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
             <TabsContent value="attributes" className="space-y-6">
               <Card className="border-0 shadow-sm bg-gradient-to-r from-purple-50 to-pink-50">
                 <CardHeader>
-                  <CardTitle className="text-lg text-purple-900">Thuộc tính cá nhân</CardTitle>
-                  <CardDescription>Các thuộc tính đặc trưng của thành viên</CardDescription>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <CardTitle className="text-lg text-purple-900">Thuộc tính cá nhân</CardTitle>
+                      <CardDescription>Các thuộc tính đặc trưng của thành viên</CardDescription>
+                    </div>
+                    <Button
+                      onClick={handleMaxAllAttributes}
+                      className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
+                    >
+                      <span className="mr-2">⚡</span>
+                      Full 100
+                    </Button>
+                  </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-6">
@@ -452,7 +499,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
           </div>
         </Tabs>
 
-        <DialogFooter className="flex justify-between items-center pt-6 border-t border-gray-100">
+        <DialogFooter className="flex justify-between items-center pt-4 border-t border-gray-100 flex-shrink-0">
           <div className="text-sm text-gray-500">
             Thành viên #{editingMember.index} • Cập nhật lần cuối: {new Date().toLocaleString('vi-VN')}
           </div>
