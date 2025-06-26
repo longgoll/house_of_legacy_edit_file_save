@@ -27,6 +27,7 @@ export interface FamilyMember {
   skill: number
   isPatriarch: number // 0: thành viên gia đình, 1: tộc trưởng
   examTitle: number // 0: None, 1: Tú Tài, 2: Cử nhân, 3: Giải nguyên, 4: Cống Sĩ, 5: Hội nguyên, 6: Tiến Sĩ, 7: Thám hoa, 8: Bảng nhãn, 9: Trạng Nguyên
+  status: number // 0: Available, 1: Bị giáng chức, 2: Du học, 3: Đánh roi, 4: Giam cầm, 5-8: Lưu đày, 9: Chém đầu, 10: Xuất chinh, 11: Du lịch, 12: Thăm quan, 13: Bỏ trốn, 14: Không khả dụng, 15: Thương mại, 16: Xuất phủ làm quan, 17: Làm việc biểu diễn, 18: Giao dịch đường phố
 }
 
 export const useFamilyMembersData = () => {
@@ -239,6 +240,7 @@ export const useFamilyMembersData = () => {
           skill: Number(getValue(memberInfo[33])) || 0,
           isPatriarch: Number(getValue(memberInfo[22])) || 0,
           examTitle: Number(getValue(memberInfo[13])) || 0,
+          status: Number(getValue(memberInfo[15])) || 0,
         }
       }).filter((member: FamilyMember | null): member is FamilyMember => member !== null)
 
@@ -400,6 +402,7 @@ export const useFamilyMembersData = () => {
         setValue(10, updatedMember.artisticTalent.toString());    // artisticTalent (convert to string)
         setValue(11, updatedMember.mood.toString());              // mood (convert to string)
         setValue(13, updatedMember.examTitle.toString());         // examTitle (convert to string)
+        setValue(15, updatedMember.status.toString());            // status (convert to string)
         setValue(16, updatedMember.reputation.toString());        // reputation (convert to string)
         setValue(20, updatedMember.charm.toString());             // charm (convert to string)
         setValue(21, updatedMember.health.toString());            // health (convert to string)

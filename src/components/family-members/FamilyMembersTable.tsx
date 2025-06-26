@@ -68,6 +68,56 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
     return isPatriarch === 1 ? 'Tộc trưởng' : 'Thành viên';
   };
 
+  const getStatusName = (status: number): string => {
+    switch (status) {
+      case 0: return 'Khả dụng';
+      case 1: return 'Bị giáng chức';
+      case 2: return 'Du học';
+      case 3: return 'Đánh roi';
+      case 4: return 'Giam cầm';
+      case 5:
+      case 6:
+      case 7:
+      case 8: return 'Lưu đày';
+      case 9: return 'Chém đầu';
+      case 10: return 'Xuất chinh';
+      case 11: return 'Du lịch';
+      case 12: return 'Thăm quan';
+      case 13: return 'Bỏ trốn';
+      case 14: return 'Không khả dụng';
+      case 15: return 'Thương mại';
+      case 16: return 'Xuất phủ làm quan';
+      case 17: return 'Làm việc biểu diễn';
+      case 18: return 'Giao dịch đường phố';
+      default: return 'Không rõ';
+    }
+  };
+
+  const getStatusColor = (status: number): string => {
+    switch (status) {
+      case 0: return 'bg-green-100 text-green-700'; // Available
+      case 1: return 'bg-red-100 text-red-700'; // Demoted
+      case 2: return 'bg-blue-100 text-blue-700'; // Study abroad
+      case 3:
+      case 4: return 'bg-orange-100 text-orange-700'; // Punishment
+      case 5:
+      case 6:
+      case 7:
+      case 8: return 'bg-red-100 text-red-700'; // Exile
+      case 9: return 'bg-red-200 text-red-800'; // Death
+      case 10: return 'bg-purple-100 text-purple-700'; // Military
+      case 11:
+      case 12: return 'bg-cyan-100 text-cyan-700'; // Travel
+      case 13: return 'bg-gray-100 text-gray-700'; // Escaped
+      case 14: return 'bg-gray-200 text-gray-800'; // Unavailable
+      case 15:
+      case 16:
+      case 17:
+      case 18: return 'bg-yellow-100 text-yellow-700'; // Working
+      default: return 'bg-gray-100 text-gray-600';
+    }
+  };
+
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
@@ -134,6 +184,11 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                           </span>
                         </div>
                       )}
+                      <div className="mt-2">
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(member.status)}`}>
+                          📋 {getStatusName(member.status)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </TableCell>
