@@ -112,10 +112,6 @@ export const ServantsTable: React.FC<ServantsTableProps> = ({
                       <span className="text-xs text-gray-600 font-medium">⏰ Tuổi thọ:</span>
                       <span className="font-bold text-gray-900">{servant.lifespan}</span>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-600 font-medium">🍀 May mắn:</span>
-                      <StatBadge value={servant.luck} />
-                    </div>
                   </div>
                 </TableCell>
 
@@ -159,6 +155,10 @@ export const ServantsTable: React.FC<ServantsTableProps> = ({
                 {/* Important Stats Column */}
                 <TableCell className="px-4 py-5">
                   <div className="grid grid-cols-2 gap-2">
+                    <div className="bg-green-50 rounded-lg p-2 text-center border border-green-200">
+                      <div className="text-xs text-green-600 font-medium mb-1">🍀 May mắn</div>
+                      <StatBadge value={servant.luck} />
+                    </div>
                     <div className="bg-blue-50 rounded-lg p-2 text-center border border-blue-200">
                       <div className="text-xs text-blue-600 font-medium mb-1">🏆 Danh tiếng</div>
                       <StatBadge value={servant.reputation} />
