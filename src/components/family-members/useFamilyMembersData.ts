@@ -14,6 +14,7 @@ export interface FamilyMember {
   martialTalent: number
   commercialTalent: number
   artisticTalent: number
+  mood: number
   strategy: number
   reputation: number
   luck: number
@@ -223,6 +224,7 @@ export const useFamilyMembersData = () => {
           martialTalent: Number(getValue(memberInfo[8])) || 0,
           commercialTalent: Number(getValue(memberInfo[9])) || 0,
           artisticTalent: Number(getValue(memberInfo[10])) || 0,
+          mood: Number(getValue(memberInfo[11])) || 0,
           strategy: Number(getValue(memberInfo[27])) || 0,
           reputation: Number(getValue(memberInfo[16])) || 0,
           luck: getLuckFromIndex4(memberInfo[4]),
@@ -392,6 +394,7 @@ export const useFamilyMembersData = () => {
         setValue(8, updatedMember.martialTalent.toString());      // martialTalent (convert to string)
         setValue(9, updatedMember.commercialTalent.toString());   // commercialTalent (convert to string)
         setValue(10, updatedMember.artisticTalent.toString());    // artisticTalent (convert to string)
+        setValue(11, updatedMember.mood.toString());              // mood (convert to string)
         setValue(16, updatedMember.reputation.toString());        // reputation (convert to string)
         setValue(20, updatedMember.charm.toString());             // charm (convert to string)
         setValue(21, updatedMember.health.toString());            // health (convert to string)

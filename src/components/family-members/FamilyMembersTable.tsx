@@ -183,6 +183,18 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                       <div className="text-xs text-pink-600 font-medium mb-1">✨ Quyến rũ</div>
                       <StatBadge value={member.charm} />
                     </div>
+                    <div className="bg-yellow-50 rounded-lg p-2 text-center border border-yellow-200">
+                      <div className="text-xs text-yellow-600 font-medium mb-1">😊 Tâm trạng</div>
+                      <StatBadge value={member.mood} />
+                    </div>
+                    <div className="bg-indigo-50 rounded-lg p-2 text-center border border-indigo-200">
+                      <div className="text-xs text-indigo-600 font-medium mb-1">💪 Thể lực</div>
+                      <StatBadge value={member.stamina} />
+                    </div>
+                    <div className="bg-teal-50 rounded-lg p-2 text-center border border-teal-200">
+                      <div className="text-xs text-teal-600 font-medium mb-1">🧠 Chiến lược</div>
+                      <StatBadge value={member.strategy} />
+                    </div>
                   </div>
                 </TableCell>
 
