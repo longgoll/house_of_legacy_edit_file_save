@@ -84,12 +84,12 @@ export default function MenuPage() {
       available: true
     },
     {
-      id: 'character',
+      id: 'inventory',
       title: 'Quản lý kho đồ',
       description: 'Chỉnh sửa thông tin kho đồ',
       icon: <Sword className="h-6 w-6" />,
-      href: '/character-manager',
-      available: false
+      href: '/inventory-manager',
+      available: true
     },
     {
       id: 'item-manager',

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { ItemLookup } from '../../components/items';
 import { ItemBatchLookup } from '../../components/items/ItemBatchLookup';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
