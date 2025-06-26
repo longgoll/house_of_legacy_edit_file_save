@@ -10,27 +10,26 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
-export interface FilterState {
+export interface ServantsFilterState {
   searchTerm: string
-  generation: string
   gender: string
-  talentType: string
-  skillType: string
   minAge: string
   maxAge: string
+  minSalary: string
+  maxSalary: string
   sortBy: string
   sortOrder: 'asc' | 'desc'
 }
 
-interface FamilyMembersFilterProps {
-  filters: FilterState
-  onFiltersChange: (filters: FilterState) => void
+interface ServantsFilterProps {
+  filters: ServantsFilterState
+  onFiltersChange: (filters: ServantsFilterState) => void
   onReset: () => void
   memberCount: number
   filteredCount: number
 }
 
-export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
+export const ServantsFilter: React.FC<ServantsFilterProps> = ({
   filters,
   onFiltersChange,
   onReset,
@@ -39,14 +38,14 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const handleFilterChange = (key: keyof FilterState, value: string) => {
+  const handleFilterChange = (key: keyof ServantsFilterState, value: string) => {
     onFiltersChange({
       ...filters,
       [key]: value
     })
   }
 
-  const handleQuickFilter = (updates: Partial<FilterState>) => {
+  const handleQuickFilter = (updates: Partial<ServantsFilterState>) => {
     onFiltersChange({
       ...filters,
       ...updates
@@ -67,35 +66,13 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
         <div className="flex flex-wrap gap-4 items-center">
           <div className="flex-1 min-w-[200px]">
             <Input
-              placeholder="🔍 Tìm kiếm theo tên..."
+              placeholder="🔍 Tìm kiếm theo tên hạ nhân..."
               value={filters.searchTerm}
               onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
               className="bg-white border-blue-300 focus:border-blue-500"
             />
           </div>
           
-          <Select 
-            value={filters.generation} 
-            onValueChange={(value) => handleFilterChange('generation', value)}
-          >
-            <SelectTrigger className="w-[140px] bg-white border-blue-300">
-              <SelectValue placeholder="Thế hệ" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Tất cả thế hệ</SelectItem>
-              <SelectItem value="1">Thế hệ 1</SelectItem>
-              <SelectItem value="2">Thế hệ 2</SelectItem>
-              <SelectItem value="3">Thế hệ 3</SelectItem>
-              <SelectItem value="4">Thế hệ 4</SelectItem>
-              <SelectItem value="5">Thế hệ 5</SelectItem>
-              <SelectItem value="6">Thế hệ 6</SelectItem>
-              <SelectItem value="7">Thế hệ 7</SelectItem>
-              <SelectItem value="8">Thế hệ 8</SelectItem>
-              <SelectItem value="9">Thế hệ 9</SelectItem>
-              <SelectItem value="10">Thế hệ 10</SelectItem>
-            </SelectContent>
-          </Select>
-
           <Select 
             value={filters.gender} 
             onValueChange={(value) => handleFilterChange('gender', value)}
@@ -131,42 +108,6 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
         {isExpanded && (
           <div className="space-y-4 pt-4 border-t border-blue-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Select 
-                value={filters.talentType} 
-                onValueChange={(value) => handleFilterChange('talentType', value)}
-              >
-                <SelectTrigger className="bg-white border-blue-300">
-                  <SelectValue placeholder="Thiên phú" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tất cả thiên phú</SelectItem>
-                  <SelectItem value="0">Không có</SelectItem>
-                  <SelectItem value="1">📚 Văn tài</SelectItem>
-                  <SelectItem value="2">⚔️ Võ tài</SelectItem>
-                  <SelectItem value="3">💰 Thương tài</SelectItem>
-                  <SelectItem value="4">🎨 Nghệ tài</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select 
-                value={filters.skillType} 
-                onValueChange={(value) => handleFilterChange('skillType', value)}
-              >
-                <SelectTrigger className="bg-white border-blue-300">
-                  <SelectValue placeholder="Kỹ năng" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tất cả kỹ năng</SelectItem>
-                  <SelectItem value="0">Không có</SelectItem>
-                  <SelectItem value="1">🙏 Đạo pháp</SelectItem>
-                  <SelectItem value="2">💊 Y học</SelectItem>
-                  <SelectItem value="3">🍀 Vận may</SelectItem>
-                  <SelectItem value="4">🔮 Bói toán</SelectItem>
-                  <SelectItem value="5">💫 Sự quyến rũ</SelectItem>
-                  <SelectItem value="6">🔨 Thủ công</SelectItem>
-                </SelectContent>
-              </Select>
-
               <Input
                 placeholder="Tuổi tối thiểu"
                 type="number"
@@ -182,6 +123,22 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
                 onChange={(e) => handleFilterChange('maxAge', e.target.value)}
                 className="bg-white border-blue-300 focus:border-blue-500"
               />
+
+              <Input
+                placeholder="Lương tối thiểu"
+                type="number"
+                value={filters.minSalary}
+                onChange={(e) => handleFilterChange('minSalary', e.target.value)}
+                className="bg-white border-blue-300 focus:border-blue-500"
+              />
+
+              <Input
+                placeholder="Lương tối đa"
+                type="number"
+                value={filters.maxSalary}
+                onChange={(e) => handleFilterChange('maxSalary', e.target.value)}
+                className="bg-white border-blue-300 focus:border-blue-500"
+              />
             </div>
 
             {/* Quick Filter Buttons */}
@@ -190,32 +147,16 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleQuickFilter({ generation: '1' })}
-                className={`${filters.generation === '1' ? 'bg-blue-100 border-blue-400 text-blue-700' : 'border-gray-300'} hover:bg-blue-50`}
+                onClick={() => handleQuickFilter({ minSalary: '1000' })}
+                className={`${filters.minSalary === '1000' ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 'border-gray-300'} hover:bg-yellow-50`}
               >
-                👴 Thế hệ 1
+                💰 Lương cao
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleQuickFilter({ talentType: '1' })}
-                className={`${filters.talentType === '1' ? 'bg-green-100 border-green-400 text-green-700' : 'border-gray-300'} hover:bg-green-50`}
-              >
-                📚 Văn tài cao
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickFilter({ talentType: '2' })}
-                className={`${filters.talentType === '2' ? 'bg-red-100 border-red-400 text-red-700' : 'border-gray-300'} hover:bg-red-50`}
-              >
-                ⚔️ Võ tài cao
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickFilter({ minAge: '80' })}
-                className={`${filters.minAge === '80' ? 'bg-purple-100 border-purple-400 text-purple-700' : 'border-gray-300'} hover:bg-purple-50`}
+                onClick={() => handleQuickFilter({ minAge: '50' })}
+                className={`${filters.minAge === '50' ? 'bg-gray-100 border-gray-400 text-gray-700' : 'border-gray-300'} hover:bg-gray-50`}
               >
                 🧓 Cao tuổi
               </Button>
@@ -238,7 +179,6 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
               <SelectItem value="index">ID</SelectItem>
               <SelectItem value="name">Tên</SelectItem>
               <SelectItem value="age">Tuổi</SelectItem>
-              <SelectItem value="generation">Thế hệ</SelectItem>
               <SelectItem value="literaryTalent">Văn tài</SelectItem>
               <SelectItem value="martialTalent">Võ tài</SelectItem>
               <SelectItem value="commercialTalent">Thương tài</SelectItem>
@@ -247,6 +187,8 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
               <SelectItem value="luck">May mắn</SelectItem>
               <SelectItem value="health">Sức khỏe</SelectItem>
               <SelectItem value="charm">Quyến rũ</SelectItem>
+              <SelectItem value="strategy">Mưu lượt</SelectItem>
+              <SelectItem value="monthlySalary">Lương tháng</SelectItem>
             </SelectContent>
           </Select>
 
@@ -260,12 +202,12 @@ export const FamilyMembersFilter: React.FC<FamilyMembersFilterProps> = ({
 
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-600 bg-white px-3 py-2 rounded-lg border border-blue-200">
-              Hiển thị: <span className="font-bold text-blue-600">{filteredCount}</span> / <span className="font-bold">{memberCount}</span> thành viên
+              Hiển thị: <span className="font-bold text-blue-600">{filteredCount}</span> / <span className="font-bold">{memberCount}</span> hạ nhân
             </div>
             
             {filteredCount < memberCount && (
               <div className="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full border border-orange-200">
-                🔍 Đang lọc ({memberCount - filteredCount} thành viên bị ẩn)
+                🔍 Đang lọc ({memberCount - filteredCount} hạ nhân bị ẩn)
               </div>
             )}
           </div>

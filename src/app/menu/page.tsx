@@ -73,14 +73,22 @@ export default function MenuPage() {
       description: 'Quản lý những người thân đã kết hôn hoặc đang kết hôn',
       icon: <Crown className="h-6 w-6" />,
       href: '/married-relatives',
-      available: false
+      available: true
     },
     {
       id: 'servants',
-      title: 'Người hầu cận',
-      description: 'Quản lý những người hầu và cận thần trong gia tộc',
+      title: 'Môn khách',
+      description: 'Quản lý các môn khách',
       icon: <Shield className="h-6 w-6" />,
       href: '/servants',
+      available: true
+    },
+    {
+      id: 'character',
+      title: 'Quản lý kho đồ',
+      description: 'Chỉnh sửa thông tin kho đồ',
+      icon: <Sword className="h-6 w-6" />,
+      href: '/character-management',
       available: false
     },
     {
@@ -90,30 +98,6 @@ export default function MenuPage() {
       icon: <Users className="h-6 w-6" />,
       href: '/family-info',
       available: true
-    },
-    {
-      id: 'character',
-      title: 'Quản lý nhân vật chính',
-      description: 'Chỉnh sửa thông tin và thuộc tính nhân vật chính',
-      icon: <Sword className="h-6 w-6" />,
-      href: '/character-management',
-      available: false
-    },
-    {
-      id: 'equipment',
-      title: 'Quản lý trang bị',
-      description: 'Quản lý vũ khí, áo giáp và trang bị',
-      icon: <Settings className="h-6 w-6" />,
-      href: '/equipment-management',
-      available: false
-    },
-    {
-      id: 'skills',
-      title: 'Quản lý kỹ năng',
-      description: 'Chỉnh sửa kỹ năng và khả năng đặc biệt',
-      icon: <Crown className="h-6 w-6" />,
-      href: '/skills-management',
-      available: false
     },
     {
       id: 'data',

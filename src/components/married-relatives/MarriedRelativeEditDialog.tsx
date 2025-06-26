@@ -17,22 +17,22 @@ import {
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FamilyMember } from './useFamilyMembersData'
+import { useMarriedRelativesData } from './useMarriedRelativesData'
 
-interface FamilyMemberEditDialogProps {
-  member: FamilyMember | null
+interface MarriedRelativeEditDialogProps {
+  member: useMarriedRelativesData | null
   isOpen: boolean
   onClose: () => void
-  onSave: (member: FamilyMember) => void
+  onSave: (member: useMarriedRelativesData) => void
 }
 
-export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
+export const MarriedRelativeEditDialog: React.FC<MarriedRelativeEditDialogProps> = ({
   member,
   isOpen,
   onClose,
   onSave
 }) => {
-  const [editingMember, setEditingMember] = useState<FamilyMember | null>(member)
+  const [editingMember, setEditingMember] = useState<useMarriedRelativesData | null>(member)
 
   React.useEffect(() => {
     if (member) {
@@ -40,7 +40,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
     }
   }, [member])
 
-  const handleInputChange = (field: keyof FamilyMember, value: string) => {
+  const handleInputChange = (field: keyof useMarriedRelativesData, value: string) => {
     if (!editingMember) return
     
     const numValue = Number(value)
@@ -50,7 +50,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
     } : null)
   }
 
-  const handleSelectChange = (field: keyof FamilyMember, value: string) => {
+  const handleSelectChange = (field: keyof useMarriedRelativesData, value: string) => {
     if (!editingMember) return
     
     const numValue = Number(value)
@@ -86,8 +86,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
       reputation: 100,
       luck: 100,
       charm: 100,
-      health: 100,
-      stamina: 100
+      health: 100
     } : null)
   }
 
@@ -100,13 +99,13 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
       <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col">
         <DialogHeader className="pb-4 border-b border-gray-100 flex-shrink-0">
           <DialogTitle className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
               {editingMember.name.charAt(0)}
             </div>
             <div>
-              <div>Chỉnh sửa thành viên gia đình</div>
+              <div>Chỉnh sửa họ hàng kết hôn</div>
               <div className="text-sm font-normal text-gray-500 mt-1">
-                {editingMember.name} - Thế hệ {editingMember.generation}
+                {editingMember.name} - {editingMember.gender === 0 ? '👩 Nữ' : '👨 Nam'}
               </div>
             </div>
           </DialogTitle>
@@ -115,7 +114,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
         <Tabs defaultValue="basic" className="flex-1 flex flex-col min-h-0">
           <TabsList className="grid w-full grid-cols-4 mb-4 flex-shrink-0">
             <TabsTrigger value="basic" className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
               Thông tin cơ bản
             </TabsTrigger>
             <TabsTrigger value="talents" className="flex items-center gap-2">
@@ -123,7 +122,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
               Tài năng
             </TabsTrigger>
             <TabsTrigger value="attributes" className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               Thuộc tính
             </TabsTrigger>
             <TabsTrigger value="special" className="flex items-center gap-2">
@@ -134,17 +133,17 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
 
           <div className="flex-1 overflow-y-auto min-h-0">
             <TabsContent value="basic" className="space-y-6">
-              <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
+              <Card className="border-0 shadow-sm bg-gradient-to-r from-purple-50 to-pink-50">
                 <CardHeader>
-                  <CardTitle className="text-lg text-blue-900">Thông tin cá nhân</CardTitle>
-                  <CardDescription>Thông tin cơ bản của thành viên gia đình</CardDescription>
+                  <CardTitle className="text-lg text-purple-900">Thông tin cá nhân</CardTitle>
+                  <CardDescription>Thông tin cơ bản của họ hàng kết hôn</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-6">
                     {/* Name - Read Only */}
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-blue-500 rounded-full"></span>
+                        <span className="w-1 h-4 bg-purple-500 rounded-full"></span>
                         Tên
                       </label>
                       <div className="relative">
@@ -163,32 +162,10 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                       <p className="text-xs text-gray-500">🔒 Trường này không thể chỉnh sửa</p>
                     </div>
 
-                    {/* Generation - Read Only */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-blue-500 rounded-full"></span>
-                        Thế hệ
-                      </label>
-                      <div className="relative">
-                        <Input
-                          type="number"
-                          value={editingMember.generation}
-                          disabled
-                          className="bg-gray-50 border-gray-200 text-gray-600 cursor-not-allowed"
-                        />
-                        <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                        </div>
-                      </div>
-                      <p className="text-xs text-gray-500">🔒 Trường này không thể chỉnh sửa</p>
-                    </div>
-
                     {/* Gender - Read Only */}
                     <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-blue-500 rounded-full"></span>
+                        <span className="w-1 h-4 bg-purple-500 rounded-full"></span>
                         Giới tính
                       </label>
                       <div className="relative">
@@ -246,27 +223,6 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                         <span>Max: 100</span>
                       </div>
                     </div>
-
-                    {/* Hobby */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-green-500 rounded-full"></span>
-                        Sở thích
-                      </label>
-                      <Input
-                        type="number"
-                        value={editingMember.hobby}
-                        onChange={(e) => handleInputChange('hobby', e.target.value)}
-                        min="0"
-                        max="10"
-                        className="border-green-200 focus:border-green-500 focus:ring-green-500"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Min: 0</span>
-                        <span>Chưa xác định</span>
-                        <span>Max: 10</span>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -278,7 +234,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                   <div className="flex justify-between items-center">
                     <div>
                       <CardTitle className="text-lg text-green-900">Tài năng chính</CardTitle>
-                      <CardDescription>Các loại tài năng cơ bản của thành viên</CardDescription>
+                      <CardDescription>Các loại tài năng cơ bản của họ hàng</CardDescription>
                     </div>
                     <Button
                       onClick={handleMaxAllTalents}
@@ -360,16 +316,16 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
             </TabsContent>
 
             <TabsContent value="attributes" className="space-y-6">
-              <Card className="border-0 shadow-sm bg-gradient-to-r from-purple-50 to-pink-50">
+              <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <div>
-                      <CardTitle className="text-lg text-purple-900">Thuộc tính cá nhân</CardTitle>
-                      <CardDescription>Các thuộc tính đặc trưng của thành viên</CardDescription>
+                      <CardTitle className="text-lg text-blue-900">Thuộc tính cá nhân</CardTitle>
+                      <CardDescription>Các thuộc tính đặc trưng của họ hàng</CardDescription>
                     </div>
                     <Button
                       onClick={handleMaxAllAttributes}
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
+                      className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 transform hover:scale-105"
                     >
                       <span className="mr-2">⚡</span>
                       Full 100
@@ -385,7 +341,6 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                       { key: 'luck', label: 'May Mắn', icon: '🍀', colorClass: 'border-green-200 focus:border-green-500 focus:ring-green-500' },
                       { key: 'charm', label: 'Quyến Rũ', icon: '✨', colorClass: 'border-pink-200 focus:border-pink-500 focus:ring-pink-500' },
                       { key: 'health', label: 'Sức Khỏe', icon: '❤️', colorClass: 'border-red-200 focus:border-red-500 focus:ring-red-500' },
-                      { key: 'stamina', label: 'Thể Lực', icon: '💪', colorClass: 'border-orange-200 focus:border-orange-500 focus:ring-orange-500' },
                     ].map(({ key, label, icon, colorClass }) => (
                       <div key={key} className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
@@ -394,8 +349,8 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                         </label>
                         <Input
                           type="number"
-                          value={editingMember[key as keyof FamilyMember] as number}
-                          onChange={(e) => handleInputChange(key as keyof FamilyMember, e.target.value)}
+                          value={editingMember[key as keyof useMarriedRelativesData] as number}
+                          onChange={(e) => handleInputChange(key as keyof useMarriedRelativesData, e.target.value)}
                           min="0"
                           max="100"
                           className={colorClass}
@@ -425,7 +380,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                       <div className="space-y-3">
                         <div>
                           <label className="text-sm font-medium text-gray-700 mb-2 block">Loại Thiên Phú</label>
-                          <Select value={editingMember.talentType.toString()} onValueChange={(value) => handleSelectChange('talentType', value)}>
+                          <Select value={editingMember.talent.toString()} onValueChange={(value) => handleSelectChange('talent', value)}>
                             <SelectTrigger className="w-full border-orange-200 focus:border-orange-500">
                               <SelectValue placeholder="Chọn loại thiên phú" />
                             </SelectTrigger>
@@ -443,8 +398,8 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                           <label className="text-sm font-medium text-gray-700 mb-2 block">Giá trị Thiên Phú</label>
                           <Input
                             type="number"
-                            value={editingMember.talent}
-                            onChange={(e) => handleInputChange('talent', e.target.value)}
+                            value={editingMember.talentValue}
+                            onChange={(e) => handleInputChange('talentValue', e.target.value)}
                             min="0"
                             max="100"
                             className="border-orange-200 focus:border-orange-500 focus:ring-orange-500"
@@ -501,7 +456,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
 
         <DialogFooter className="flex justify-between items-center pt-4 border-t border-gray-100 flex-shrink-0">
           <div className="text-sm text-gray-500">
-            Thành viên #{editingMember.index} • Cập nhật lần cuối: {new Date().toLocaleString('vi-VN')}
+            Họ hàng #{editingMember.index} • Cập nhật lần cuối: {new Date().toLocaleString('vi-VN')}
           </div>
           <div className="flex gap-3">
             <Button
@@ -516,7 +471,7 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
             </Button>
             <Button
               onClick={handleSave}
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium shadow-lg transition-all duration-200 transform hover:scale-105"
+              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium shadow-lg transition-all duration-200 transform hover:scale-105"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />

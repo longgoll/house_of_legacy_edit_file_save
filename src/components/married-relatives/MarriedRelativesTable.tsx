@@ -1,22 +1,17 @@
+'use client'
+
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import { FamilyMember } from './useFamilyMembersData'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useMarriedRelativesData } from './useMarriedRelativesData'
 
-interface FamilyMembersTableProps {
-  familyMembers: FamilyMember[]
-  onEditMember: (member: FamilyMember) => void
+interface MarriedRelativesTableProps {
+  marriedRelatives?: useMarriedRelativesData[]
+  onEditMember: (member: useMarriedRelativesData) => void
 }
 
-export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
-  familyMembers,
+export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
+  marriedRelatives = [],
   onEditMember
 }) => {
   // Helper functions to convert type numbers to readable text
@@ -48,76 +43,6 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
     return gender === 0 ? 'Nữ' : 'Nam';
   };
 
-  const getExamTitleName = (title: number): string => {
-    switch (title) {
-      case 0: return 'Không có';
-      case 1: return 'Tú Tài';
-      case 2: return 'Cử nhân';
-      case 3: return 'Giải nguyên';
-      case 4: return 'Cống Sĩ';
-      case 5: return 'Hội nguyên';
-      case 6: return 'Tiến Sĩ';
-      case 7: return 'Thám hoa';
-      case 8: return 'Bảng nhãn';
-      case 9: return 'Trạng Nguyên';
-      default: return 'Không rõ';
-    }
-  };
-
-  const getPatriarchName = (isPatriarch: number): string => {
-    return isPatriarch === 1 ? 'Tộc trưởng' : 'Thành viên';
-  };
-
-  const getStatusName = (status: number): string => {
-    switch (status) {
-      case 0: return 'Khả dụng';
-      case 1: return 'Bị giáng chức';
-      case 2: return 'Du học';
-      case 3: return 'Đánh roi';
-      case 4: return 'Giam cầm';
-      case 5:
-      case 6:
-      case 7:
-      case 8: return 'Lưu đày';
-      case 9: return 'Chém đầu';
-      case 10: return 'Xuất chinh';
-      case 11: return 'Du lịch';
-      case 12: return 'Thăm quan';
-      case 13: return 'Bỏ trốn';
-      case 14: return 'Không khả dụng';
-      case 15: return 'Thương mại';
-      case 16: return 'Xuất phủ làm quan';
-      case 17: return 'Làm việc biểu diễn';
-      case 18: return 'Giao dịch đường phố';
-      default: return 'Không rõ';
-    }
-  };
-
-  const getStatusColor = (status: number): string => {
-    switch (status) {
-      case 0: return 'bg-green-100 text-green-700'; // Available
-      case 1: return 'bg-red-100 text-red-700'; // Demoted
-      case 2: return 'bg-blue-100 text-blue-700'; // Study abroad
-      case 3:
-      case 4: return 'bg-orange-100 text-orange-700'; // Punishment
-      case 5:
-      case 6:
-      case 7:
-      case 8: return 'bg-red-100 text-red-700'; // Exile
-      case 9: return 'bg-red-200 text-red-800'; // Death
-      case 10: return 'bg-purple-100 text-purple-700'; // Military
-      case 11:
-      case 12: return 'bg-cyan-100 text-cyan-700'; // Travel
-      case 13: return 'bg-gray-100 text-gray-700'; // Escaped
-      case 14: return 'bg-gray-200 text-gray-800'; // Unavailable
-      case 15:
-      case 16:
-      case 17:
-      case 18: return 'bg-yellow-100 text-yellow-700'; // Working
-      default: return 'bg-gray-100 text-gray-600';
-    }
-  };
-
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
@@ -138,7 +63,7 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
         <Table>
           <TableHeader>
             <TableRow className="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
-              <TableHead className="px-6 py-4 text-left font-bold text-gray-800 text-sm">👤 Thành viên</TableHead>
+              <TableHead className="px-6 py-4 text-left font-bold text-gray-800 text-sm">💕 Họ hàng kết hôn</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">📊 Thông tin cơ bản</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⭐ Tài năng chính</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">🎯 Kỹ năng đặc biệt</TableHead>
@@ -147,7 +72,7 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {familyMembers.map((member, idx) => (
+            {(marriedRelatives || []).map((member, idx) => (
               <TableRow key={member.index} className={`hover:bg-blue-50 transition-all duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} border-b border-gray-100`}>
                 {/* Member Info Column */}
                 <TableCell className="px-6 py-5">
@@ -161,32 +86,12 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                       <div className="font-bold text-gray-900 text-lg mb-1">{member.name}</div>
                       <div className="text-sm text-gray-500 mb-2">ID: #{member.index}</div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full font-medium">
-                          Thế hệ {member.generation}
-                        </span>
                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                           member.gender === 0 
                             ? 'bg-pink-100 text-pink-700' 
                             : 'bg-blue-100 text-blue-700'
                         }`}>
                           {getGenderName(member.gender)}
-                        </span>
-                        {member.isPatriarch === 1 && (
-                          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full font-medium">
-                            👑 {getPatriarchName(member.isPatriarch)}
-                          </span>
-                        )}
-                      </div>
-                      {member.examTitle > 0 && (
-                        <div className="mt-2">
-                          <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-medium">
-                            🎓 {getExamTitleName(member.examTitle)}
-                          </span>
-                        </div>
-                      )}
-                      <div className="mt-2">
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(member.status)}`}>
-                          📋 {getStatusName(member.status)}
                         </span>
                       </div>
                     </div>
@@ -203,12 +108,6 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-600 font-medium">⏰ Tuổi thọ:</span>
                       <span className="font-bold text-gray-900">{member.lifespan}</span>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-gray-200">
-                      <span className="text-xs text-gray-600 font-medium">❤️ Sở thích:</span>
-                      <div className="text-sm text-gray-700 font-medium mt-1 truncate" title={member.hobby.toString()}>
-                        {member.hobby}
-                      </div>
                     </div>
                   </div>
                 </TableCell>
@@ -240,8 +139,8 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                   <div className="space-y-3">
                     <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-3 border border-purple-200">
                       <div className="text-xs text-purple-600 font-semibold mb-1">🌟 Thiên phú</div>
-                      <div className="text-sm font-bold text-purple-800">{getTalentTypeName(member.talentType)}</div>
-                      <div className="text-lg font-bold text-purple-900 mt-1">{member.talent}</div>
+                      <div className="text-sm font-bold text-purple-800">{getTalentTypeName(member.talent)}</div>
+                      <div className="text-lg font-bold text-purple-900 mt-1">{member.talentValue}</div>
                     </div>
                     <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
                       <div className="text-xs text-orange-600 font-semibold mb-1">🎯 Kỹ năng</div>
@@ -271,15 +170,11 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                       <StatBadge value={member.charm} />
                     </div>
                     <div className="bg-yellow-50 rounded-lg p-2 text-center border border-yellow-200">
-                      <div className="text-xs text-yellow-600 font-medium mb-1">😊 Tâm trạng</div>
+                      <div className="text-xs text-yellow-600 font-medium mb-1">� Tâm trạng</div>
                       <StatBadge value={member.mood} />
                     </div>
                     <div className="bg-indigo-50 rounded-lg p-2 text-center border border-indigo-200">
-                      <div className="text-xs text-indigo-600 font-medium mb-1">💪 Thể lực</div>
-                      <StatBadge value={member.stamina} />
-                    </div>
-                    <div className="bg-teal-50 rounded-lg p-2 text-center border border-teal-200">
-                      <div className="text-xs text-teal-600 font-medium mb-1">🧠 Chiến lược</div>
+                      <div className="text-xs text-indigo-600 font-medium mb-1">🧠 Chiến lược</div>
                       <StatBadge value={member.strategy} />
                     </div>
                   </div>
@@ -301,15 +196,15 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
           </TableBody>
         </Table>
         
-        {familyMembers.length === 0 && (
+        {(!marriedRelatives || marriedRelatives.length === 0) && (
           <div className="text-center py-16">
             <div className="text-gray-400 mb-4">
               <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-gray-600 mb-2">Chưa có thành viên nào</h3>
-            <p className="text-gray-500 text-lg">Hãy thêm dữ liệu game để hiển thị thông tin thành viên gia đình</p>
+            <h3 className="text-xl font-bold text-gray-600 mb-2">Chưa có họ hàng kết hôn nào</h3>
+            <p className="text-gray-500 text-lg">Hãy thêm dữ liệu game để hiển thị thông tin họ hàng kết hôn</p>
           </div>
         )}
       </div>
