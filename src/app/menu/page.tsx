@@ -84,36 +84,20 @@ export default function MenuPage() {
       available: true
     },
     {
+      id: 'character',
+      title: 'Quản lý kho đồ',
+      description: 'Chỉnh sửa thông tin kho đồ',
+      icon: <Sword className="h-6 w-6" />,
+      href: '/character-management',
+      available: false
+    },
+    {
       id: 'family-info',
       title: 'Thông tin gia tộc',
       description: 'Xem thông tin chi tiết về gia tộc',
       icon: <Users className="h-6 w-6" />,
       href: '/family-info',
       available: true
-    },
-    {
-      id: 'character',
-      title: 'Quản lý nhân vật chính',
-      description: 'Chỉnh sửa thông tin và thuộc tính nhân vật chính',
-      icon: <Sword className="h-6 w-6" />,
-      href: '/character-management',
-      available: false
-    },
-    {
-      id: 'equipment',
-      title: 'Quản lý trang bị',
-      description: 'Quản lý vũ khí, áo giáp và trang bị',
-      icon: <Settings className="h-6 w-6" />,
-      href: '/equipment-management',
-      available: false
-    },
-    {
-      id: 'skills',
-      title: 'Quản lý kỹ năng',
-      description: 'Chỉnh sửa kỹ năng và khả năng đặc biệt',
-      icon: <Crown className="h-6 w-6" />,
-      href: '/skills-management',
-      available: false
     },
     {
       id: 'data',

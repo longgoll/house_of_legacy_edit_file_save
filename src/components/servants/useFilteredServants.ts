@@ -5,7 +5,6 @@ import { ServantsFilterState } from './ServantsFilter'
 const DEFAULT_FILTERS: ServantsFilterState = {
   searchTerm: '',
   gender: 'all',
-  skillType: 'all',
   minAge: '',
   maxAge: '',
   minSalary: '',
@@ -48,11 +47,6 @@ export const useFilteredServants = (servants: ServantsData[]) => {
 
       // Filter by gender
       if (filters.gender && filters.gender !== 'all' && servant.gender !== parseInt(filters.gender)) {
-        return false
-      }
-
-      // Filter by skill type
-      if (filters.skillType && filters.skillType !== 'all' && servant.skillType !== parseInt(filters.skillType)) {
         return false
       }
 

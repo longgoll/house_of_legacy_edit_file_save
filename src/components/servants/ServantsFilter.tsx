@@ -13,7 +13,6 @@ import { Card } from '@/components/ui/card'
 export interface ServantsFilterState {
   searchTerm: string
   gender: string
-  skillType: string
   minAge: string
   maxAge: string
   minSalary: string
@@ -109,29 +108,6 @@ export const ServantsFilter: React.FC<ServantsFilterProps> = ({
         {isExpanded && (
           <div className="space-y-4 pt-4 border-t border-blue-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Select 
-                value={filters.skillType} 
-                onValueChange={(value) => handleFilterChange('skillType', value)}
-              >
-                <SelectTrigger className="bg-white border-blue-300">
-                  <SelectValue placeholder="Kỹ năng" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tất cả kỹ năng</SelectItem>
-                  <SelectItem value="0">Không có</SelectItem>
-                  <SelectItem value="1">🙏 Đạo pháp</SelectItem>
-                  <SelectItem value="2">💊 Y học</SelectItem>
-                  <SelectItem value="3">🍀 Vận may</SelectItem>
-                  <SelectItem value="4">🔮 Bói toán</SelectItem>
-                  <SelectItem value="5">💫 Sự quyến rũ</SelectItem>
-                  <SelectItem value="6">🔨 Thủ công</SelectItem>
-                  <SelectItem value="7">💼 Kinh doanh</SelectItem>
-                  <SelectItem value="8">👑 Lãnh đạo</SelectItem>
-                  <SelectItem value="9">⚔️ Chiến đấu</SelectItem>
-                  <SelectItem value="10">📚 Học thuật</SelectItem>
-                </SelectContent>
-              </Select>
-
               <Input
                 placeholder="Tuổi tối thiểu"
                 type="number"
@@ -168,30 +144,6 @@ export const ServantsFilter: React.FC<ServantsFilterProps> = ({
             {/* Quick Filter Buttons */}
             <div className="flex flex-wrap gap-2">
               <span className="text-sm font-medium text-gray-700">⚡ Lọc nhanh:</span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickFilter({ skillType: '1' })}
-                className={`${filters.skillType === '1' ? 'bg-purple-100 border-purple-400 text-purple-700' : 'border-gray-300'} hover:bg-purple-50`}
-              >
-                🙏 Đạo pháp
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickFilter({ skillType: '2' })}
-                className={`${filters.skillType === '2' ? 'bg-green-100 border-green-400 text-green-700' : 'border-gray-300'} hover:bg-green-50`}
-              >
-                💊 Y học
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleQuickFilter({ skillType: '6' })}
-                className={`${filters.skillType === '6' ? 'bg-orange-100 border-orange-400 text-orange-700' : 'border-gray-300'} hover:bg-orange-50`}
-              >
-                🔨 Thủ công
-              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -237,7 +189,6 @@ export const ServantsFilter: React.FC<ServantsFilterProps> = ({
               <SelectItem value="charm">Quyến rũ</SelectItem>
               <SelectItem value="strategy">Mưu lượt</SelectItem>
               <SelectItem value="monthlySalary">Lương tháng</SelectItem>
-              <SelectItem value="skillValue">Giá trị kỹ năng</SelectItem>
             </SelectContent>
           </Select>
 

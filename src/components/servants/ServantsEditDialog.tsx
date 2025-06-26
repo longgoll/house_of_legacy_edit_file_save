@@ -100,23 +100,6 @@ export const ServantsEditDialog: React.FC<ServantsEditDialogProps> = ({
     } : null)
   }
 
-  const getSkillTypeName = (type: number): string => {
-    switch (type) {
-      case 0: return 'Không có';
-      case 1: return 'Đạo pháp';
-      case 2: return 'Y học';
-      case 3: return 'Vận may';
-      case 4: return 'Bói toán';
-      case 5: return 'Sự quyến rũ';
-      case 6: return 'Thủ công';
-      case 7: return 'Kinh doanh';
-      case 8: return 'Lãnh đạo';
-      case 9: return 'Chiến đấu';
-      case 10: return 'Học thuật';
-      default: return 'Không rõ';
-    }
-  };
-
   if (!editingServant) {
     return null
   }
@@ -139,7 +122,7 @@ export const ServantsEditDialog: React.FC<ServantsEditDialogProps> = ({
         </DialogHeader>
 
         <Tabs defaultValue="basic" className="flex-1 flex flex-col min-h-0">
-          <TabsList className="grid w-full grid-cols-5 mb-4 flex-shrink-0">
+          <TabsList className="grid w-full grid-cols-4 mb-4 flex-shrink-0">
             <TabsTrigger value="basic" className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
               Thông tin cơ bản
@@ -151,10 +134,6 @@ export const ServantsEditDialog: React.FC<ServantsEditDialogProps> = ({
             <TabsTrigger value="attributes" className="flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               Thuộc tính
-            </TabsTrigger>
-            <TabsTrigger value="skills" className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
-              Kỹ năng
             </TabsTrigger>
             <TabsTrigger value="advanced" className="flex items-center gap-2">
               <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
@@ -483,67 +462,6 @@ export const ServantsEditDialog: React.FC<ServantsEditDialogProps> = ({
                   </div>
                   <div className="text-xs text-gray-500 mt-4 text-center">
                     Tất cả thuộc tính có giá trị từ 0 đến 100
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="skills" className="space-y-6">
-              <Card className="border-0 shadow-sm bg-gradient-to-r from-orange-50 to-red-50">
-                <CardHeader>
-                  <CardTitle className="text-lg text-orange-900">Kỹ năng chuyên môn</CardTitle>
-                  <CardDescription>Kỹ năng và năng lực đặc biệt của hầu cận</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-2 gap-6">
-                    {/* Skill Type */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-orange-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-orange-500 rounded-full"></span>
-                        🎯 Loại kỹ năng
-                      </label>
-                      <Select value={editingServant.skillType.toString()} onValueChange={(value) => handleSelectChange('skillType', value)}>
-                        <SelectTrigger className="border-orange-200 focus:border-orange-500 focus:ring-orange-500">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="0">Không có</SelectItem>
-                          <SelectItem value="1">Đạo pháp</SelectItem>
-                          <SelectItem value="2">Y học</SelectItem>
-                          <SelectItem value="3">Vận may</SelectItem>
-                          <SelectItem value="4">Bói toán</SelectItem>
-                          <SelectItem value="5">Sự quyến rũ</SelectItem>
-                          <SelectItem value="6">Thủ công</SelectItem>
-                          <SelectItem value="7">Kinh doanh</SelectItem>
-                          <SelectItem value="8">Lãnh đạo</SelectItem>
-                          <SelectItem value="9">Chiến đấu</SelectItem>
-                          <SelectItem value="10">Học thuật</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <p className="text-xs text-gray-500">
-                        Hiện tại: {getSkillTypeName(editingServant.skillType)}
-                      </p>
-                    </div>
-
-                    {/* Skill Value */}
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-orange-700 flex items-center gap-2">
-                        <span className="w-1 h-4 bg-orange-500 rounded-full"></span>
-                        📊 Giá trị kỹ năng
-                      </label>
-                      <Input
-                        type="number"
-                        value={editingServant.skillValue}
-                        onChange={(e) => handleInputChange('skillValue', e.target.value)}
-                        min="0"
-                        max="100"
-                        className="border-orange-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Min: 0</span>
-                        <span>Max: 100</span>
-                      </div>
-                    </div>
                   </div>
                 </CardContent>
               </Card>

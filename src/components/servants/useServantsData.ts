@@ -7,8 +7,6 @@ export interface ServantsData {
   name: string
   gender: number // Giới tính từ index 2 split[4] - 1: nam, 0: nữ
   lifespan: number // Tuổi thọ từ index 2 split[5]
-  skillType: number // Loại kỹ năng từ index 2 split[6]
-  skillValue: number // Giá trị kỹ năng từ index 2 split[7]
   luck: number // May mắn từ index 2 split[8]
   age: number // Tuổi từ index 3
   literaryTalent: number // Văn tài từ index 4
@@ -129,16 +127,6 @@ export const useServantsData = () => {
           return getDataFromIndex2(item, 5) as number;
         };
 
-        // Extract skillType from index 2 using split (index 6 after split)
-        const getSkillTypeFromIndex2 = (item: unknown): number => {
-          return getDataFromIndex2(item, 6) as number;
-        };
-
-        // Extract skillValue from index 2 using split (index 7 after split)
-        const getSkillValueFromIndex2 = (item: unknown): number => {
-          return getDataFromIndex2(item, 7) as number;
-        };
-
         // Extract luck from index 2 using split (index 8 after split)
         const getLuckFromIndex2 = (item: unknown): number => {
           return getDataFromIndex2(item, 8) as number;
@@ -149,8 +137,6 @@ export const useServantsData = () => {
           name: getNameFromIndex2(servantInfo[2]),
           gender: getGenderFromIndex2(servantInfo[2]), // Giới tính (1: nam, 0: nữ)
           lifespan: getLifespanFromIndex2(servantInfo[2]), // Tuổi thọ
-          skillType: getSkillTypeFromIndex2(servantInfo[2]), // Loại kỹ năng
-          skillValue: getSkillValueFromIndex2(servantInfo[2]), // Giá trị kỹ năng
           luck: getLuckFromIndex2(servantInfo[2]), // May mắn
           age: Number(getValue(servantInfo[3])) || 0, // Tuổi
           literaryTalent: Number(getValue(servantInfo[4])) || 0, // Văn tài
@@ -292,12 +278,10 @@ export const useServantsData = () => {
             const updatedParts = [...existingParts]; // Copy existing parts
             
             // Update based on servant structure:
-            // Index 0: name, Index 4: gender, Index 5: lifespan, Index 6: skillType, Index 7: skillValue, Index 8: luck
+            // Index 0: name, Index 4: gender, Index 5: lifespan, Index 8: luck
             updatedParts[0] = servant.name;                         // 0: name
             updatedParts[4] = servant.gender.toString();            // 4: gender (1: nam, 0: nữ)
             updatedParts[5] = servant.lifespan.toString();          // 5: lifespan
-            updatedParts[6] = servant.skillType.toString();         // 6: skillType
-            updatedParts[7] = servant.skillValue.toString();        // 7: skillValue
             updatedParts[8] = servant.luck.toString();              // 8: luck
             // Keep any additional parts as they are (preserve original data)
             

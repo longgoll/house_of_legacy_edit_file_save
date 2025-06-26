@@ -14,34 +14,16 @@ export const ServantsTable: React.FC<ServantsTableProps> = ({
   servants = [],
   onEditServant
 }) => {
-  // Helper functions to convert type numbers to readable text
-  const getSkillTypeName = (type: number): string => {
-    switch (type) {
-      case 0: return 'Không có';
-      case 1: return 'Đạo pháp';
-      case 2: return 'Y học';
-      case 3: return 'Vận may';
-      case 4: return 'Bói toán';
-      case 5: return 'Sự quyến rũ';
-      case 6: return 'Thủ công';
-      case 7: return 'Kinh doanh';
-      case 8: return 'Lãnh đạo';
-      case 9: return 'Chiến đấu';
-      case 10: return 'Học thuật';
-      default: return 'Không rõ';
-    }
-  };
-
-  const getGenderName = (gender: number): string => {
-    return gender === 0 ? 'Nữ' : 'Nam';
-  };
-
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
     if (value >= 60) return 'text-blue-600 bg-blue-50 border-blue-200';
     if (value >= 40) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
     return 'text-red-600 bg-red-50 border-red-200';
+  };
+
+  const getGenderName = (gender: number): string => {
+    return gender === 0 ? 'Nữ' : 'Nam';
   };
 
   const StatBadge = ({ value }: { value: number }) => (
@@ -69,7 +51,7 @@ export const ServantsTable: React.FC<ServantsTableProps> = ({
               <TableHead className="px-6 py-4 text-left font-bold text-gray-800 text-sm">👥 Thông tin hầu</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">📊 Thông tin cơ bản</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⭐ Tài năng</TableHead>
-              <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">🎯 Kỹ năng & Lương</TableHead>
+              <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">💸 Lương</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">💫 Chỉ số quan trọng</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⚙️ Hành động</TableHead>
             </TableRow>
@@ -137,18 +119,11 @@ export const ServantsTable: React.FC<ServantsTableProps> = ({
                   </div>
                 </TableCell>
 
-                {/* Skills & Salary Column */}
+                {/* Salary Column */}
                 <TableCell className="px-4 py-5">
-                  <div className="space-y-3">
-                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
-                      <div className="text-xs text-orange-600 font-semibold mb-1">🎯 Kỹ năng</div>
-                      <div className="text-sm font-bold text-orange-800">{getSkillTypeName(servant.skillType)}</div>
-                      <div className="text-lg font-bold text-orange-900 mt-1">{servant.skillValue}</div>
-                    </div>
-                    <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border border-green-200">
-                      <div className="text-xs text-green-600 font-semibold mb-1">💸 Lương/tháng</div>
-                      <div className="text-lg font-bold text-green-900">{formatSalary(servant.monthlySalary)}</div>
-                    </div>
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-3 border border-green-200">
+                    <div className="text-xs text-green-600 font-semibold mb-1">💸 Lương/tháng</div>
+                    <div className="text-lg font-bold text-green-900">{formatSalary(servant.monthlySalary)}</div>
                   </div>
                 </TableCell>
 
