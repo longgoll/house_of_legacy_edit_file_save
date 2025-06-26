@@ -256,103 +256,67 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                 <CardContent>
                   <div className="grid grid-cols-2 gap-6">
                     {/* Văn Tài */}
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                         <span className="text-lg">📚</span>
                         Văn Tài
                       </label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="number"
-                          value={editingMember.literaryTalent}
-                          onChange={(e) => handleInputChange('literaryTalent', e.target.value)}
-                          min="0"
-                          max="100"
-                          className="border-blue-200 focus:border-blue-500 focus:ring-blue-500 flex-1"
-                        />
-                        <span className="text-blue-500 font-bold text-sm min-w-[45px]">{editingMember.literaryTalent.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
-                          style={{ width: `${editingMember.literaryTalent}%` }}
-                        ></div>
-                      </div>
+                      <Input
+                        type="number"
+                        value={editingMember.literaryTalent}
+                        onChange={(e) => handleInputChange('literaryTalent', e.target.value)}
+                        min="0"
+                        max="100"
+                        className="border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                      />
                     </div>
 
                     {/* Võ Tài */}
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                         <span className="text-lg">⚔️</span>
                         Võ Tài
                       </label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="number"
-                          value={editingMember.martialTalent}
-                          onChange={(e) => handleInputChange('martialTalent', e.target.value)}
-                          min="0"
-                          max="100"
-                          className="border-red-200 focus:border-red-500 focus:ring-red-500 flex-1"
-                        />
-                        <span className="text-red-500 font-bold text-sm min-w-[45px]">{editingMember.martialTalent.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-red-500 h-2 rounded-full transition-all duration-300" 
-                          style={{ width: `${editingMember.martialTalent}%` }}
-                        ></div>
-                      </div>
+                      <Input
+                        type="number"
+                        value={editingMember.martialTalent}
+                        onChange={(e) => handleInputChange('martialTalent', e.target.value)}
+                        min="0"
+                        max="100"
+                        className="border-red-200 focus:border-red-500 focus:ring-red-500"
+                      />
                     </div>
 
                     {/* Thương Tài */}
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                         <span className="text-lg">💰</span>
                         Thương Tài
                       </label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="number"
-                          value={editingMember.commercialTalent}
-                          onChange={(e) => handleInputChange('commercialTalent', e.target.value)}
-                          min="0"
-                          max="100"
-                          className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500 flex-1"
-                        />
-                        <span className="text-yellow-600 font-bold text-sm min-w-[45px]">{editingMember.commercialTalent.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-yellow-500 h-2 rounded-full transition-all duration-300" 
-                          style={{ width: `${editingMember.commercialTalent}%` }}
-                        ></div>
-                      </div>
+                      <Input
+                        type="number"
+                        value={editingMember.commercialTalent}
+                        onChange={(e) => handleInputChange('commercialTalent', e.target.value)}
+                        min="0"
+                        max="100"
+                        className="border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500"
+                      />
                     </div>
 
                     {/* Nghệ Tài */}
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                         <span className="text-lg">🎨</span>
                         Nghệ Tài
                       </label>
-                      <div className="flex items-center gap-3">
-                        <Input
-                          type="number"
-                          value={editingMember.artisticTalent}
-                          onChange={(e) => handleInputChange('artisticTalent', e.target.value)}
-                          min="0"
-                          max="100"
-                          className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 flex-1"
-                        />
-                        <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.artisticTalent.toFixed(1)}%</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-purple-500 h-2 rounded-full transition-all duration-300" 
-                          style={{ width: `${editingMember.artisticTalent}%` }}
-                        ></div>
-                      </div>
+                      <Input
+                        type="number"
+                        value={editingMember.artisticTalent}
+                        onChange={(e) => handleInputChange('artisticTalent', e.target.value)}
+                        min="0"
+                        max="100"
+                        className="border-purple-200 focus:border-purple-500 focus:ring-purple-500"
+                      />
                     </div>
                   </div>
                 </CardContent>
@@ -366,40 +330,29 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
                   <CardDescription>Các thuộc tính đặc trưng của thành viên</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 gap-6">
                     {[
-                      { key: 'mood', label: 'Tâm Trạng', icon: '😊', colorClass: 'border-cyan-200 focus:border-cyan-500 focus:ring-cyan-500', textColor: 'text-cyan-500', bgColor: 'bg-cyan-500' },
-                      { key: 'strategy', label: 'Chiến Lược', icon: '🧠', colorClass: 'border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500', textColor: 'text-indigo-500', bgColor: 'bg-indigo-500' },
-                      { key: 'reputation', label: 'Danh Tiếng', icon: '⭐', colorClass: 'border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500', textColor: 'text-yellow-600', bgColor: 'bg-yellow-500' },
-                      { key: 'luck', label: 'May Mắn', icon: '🍀', colorClass: 'border-green-200 focus:border-green-500 focus:ring-green-500', textColor: 'text-green-500', bgColor: 'bg-green-500' },
-                      { key: 'charm', label: 'Quyến Rũ', icon: '✨', colorClass: 'border-pink-200 focus:border-pink-500 focus:ring-pink-500', textColor: 'text-pink-500', bgColor: 'bg-pink-500' },
-                      { key: 'health', label: 'Sức Khỏe', icon: '❤️', colorClass: 'border-red-200 focus:border-red-500 focus:ring-red-500', textColor: 'text-red-500', bgColor: 'bg-red-500' },
-                      { key: 'stamina', label: 'Thể Lực', icon: '💪', colorClass: 'border-orange-200 focus:border-orange-500 focus:ring-orange-500', textColor: 'text-orange-500', bgColor: 'bg-orange-500' },
-                    ].map(({ key, label, icon, colorClass, textColor, bgColor }) => (
-                      <div key={key} className="space-y-3">
+                      { key: 'mood', label: 'Tâm Trạng', icon: '😊', colorClass: 'border-cyan-200 focus:border-cyan-500 focus:ring-cyan-500' },
+                      { key: 'strategy', label: 'Chiến Lược', icon: '🧠', colorClass: 'border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500' },
+                      { key: 'reputation', label: 'Danh Tiếng', icon: '⭐', colorClass: 'border-yellow-200 focus:border-yellow-500 focus:ring-yellow-500' },
+                      { key: 'luck', label: 'May Mắn', icon: '🍀', colorClass: 'border-green-200 focus:border-green-500 focus:ring-green-500' },
+                      { key: 'charm', label: 'Quyến Rũ', icon: '✨', colorClass: 'border-pink-200 focus:border-pink-500 focus:ring-pink-500' },
+                      { key: 'health', label: 'Sức Khỏe', icon: '❤️', colorClass: 'border-red-200 focus:border-red-500 focus:ring-red-500' },
+                      { key: 'stamina', label: 'Thể Lực', icon: '💪', colorClass: 'border-orange-200 focus:border-orange-500 focus:ring-orange-500' },
+                    ].map(({ key, label, icon, colorClass }) => (
+                      <div key={key} className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                           <span className="text-lg">{icon}</span>
                           {label}
                         </label>
-                        <div className="flex items-center gap-3">
-                          <Input
-                            type="number"
-                            value={editingMember[key as keyof FamilyMember] as number}
-                            onChange={(e) => handleInputChange(key as keyof FamilyMember, e.target.value)}
-                            min="0"
-                            max="100"
-                            className={`${colorClass} flex-1`}
-                          />
-                          <span className={`${textColor} font-bold text-sm min-w-[45px]`}>
-                            {(editingMember[key as keyof FamilyMember] as number).toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
-                          <div 
-                            className={`${bgColor} h-1.5 rounded-full transition-all duration-300`}
-                            style={{ width: `${editingMember[key as keyof FamilyMember] as number}%` }}
-                          ></div>
-                        </div>
+                        <Input
+                          type="number"
+                          value={editingMember[key as keyof FamilyMember] as number}
+                          onChange={(e) => handleInputChange(key as keyof FamilyMember, e.target.value)}
+                          min="0"
+                          max="100"
+                          className={colorClass}
+                        />
                       </div>
                     ))}
                   </div>
@@ -441,23 +394,14 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
 
                         <div>
                           <label className="text-sm font-medium text-gray-700 mb-2 block">Giá trị Thiên Phú</label>
-                          <div className="flex items-center gap-3">
-                            <Input
-                              type="number"
-                              value={editingMember.talent}
-                              onChange={(e) => handleInputChange('talent', e.target.value)}
-                              min="0"
-                              max="100"
-                              className="border-orange-200 focus:border-orange-500 focus:ring-orange-500 flex-1"
-                            />
-                            <span className="text-orange-500 font-bold text-sm min-w-[45px]">{editingMember.talent.toFixed(1)}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div 
-                              className="bg-orange-500 h-2 rounded-full transition-all duration-300" 
-                              style={{ width: `${editingMember.talent}%` }}
-                            ></div>
-                          </div>
+                          <Input
+                            type="number"
+                            value={editingMember.talent}
+                            onChange={(e) => handleInputChange('talent', e.target.value)}
+                            min="0"
+                            max="100"
+                            className="border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                          />
                         </div>
                       </div>
                     </div>
@@ -490,23 +434,14 @@ export const FamilyMemberEditDialog: React.FC<FamilyMemberEditDialogProps> = ({
 
                         <div>
                           <label className="text-sm font-medium text-gray-700 mb-2 block">Giá trị Kỹ Năng</label>
-                          <div className="flex items-center gap-3">
-                            <Input
-                              type="number"
-                              value={editingMember.skill}
-                              onChange={(e) => handleInputChange('skill', e.target.value)}
-                              min="0"
-                              max="100"
-                              className="border-purple-200 focus:border-purple-500 focus:ring-purple-500 flex-1"
-                            />
-                            <span className="text-purple-500 font-bold text-sm min-w-[45px]">{editingMember.skill.toFixed(1)}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
-                            <div 
-                              className="bg-purple-500 h-2 rounded-full transition-all duration-300" 
-                              style={{ width: `${editingMember.skill}%` }}
-                            ></div>
-                          </div>
+                          <Input
+                            type="number"
+                            value={editingMember.skill}
+                            onChange={(e) => handleInputChange('skill', e.target.value)}
+                            min="0"
+                            max="100"
+                            className="border-purple-200 focus:border-purple-500 focus:ring-purple-500"
+                          />
                         </div>
                       </div>
                     </div>
