@@ -3,19 +3,29 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useMarriedRelativesData, useMemberQuData } from './useMarriedRelativesData'
+import { useMarriedRelativesData } from './useMarriedRelativesData'
 
 interface MarriedRelativesTableProps {
-  onEditMember?: (member: useMarriedRelativesData) => void
+  marriedRelatives?: useMarriedRelativesData[]
+  onEditMember: (member: useMarriedRelativesData) => void
 }
 
 export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
+  marriedRelatives = [],
   onEditMember
 }) => {
-  // Use the hook to get married relatives data
-  const { memberQu: marriedRelatives, loading, error } = useMemberQuData()
-
   // Helper functions to convert type numbers to readable text
+  const getTalentTypeName = (type: number): string => {
+    switch (type) {
+      case 0: return 'Không có';
+      case 1: return 'Văn tài';
+      case 2: return 'Võ tài';
+      case 3: return 'Thương tài';
+      case 4: return 'Nghệ tài';
+      default: return 'Không rõ';
+    }
+  };
+
   const getSkillTypeName = (type: number): string => {
     switch (type) {
       case 0: return 'Không có';
@@ -33,17 +43,6 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
     return gender === 0 ? 'Nữ' : 'Nam';
   };
 
-  const getTalentTypeName = (type: number): string => {
-    switch (type) {
-      case 0: return 'Không có';
-      case 1: return 'Văn học';
-      case 2: return 'Võ thuật';
-      case 3: return 'Thương mại';
-      case 4: return 'Nghệ thuật';
-      default: return 'Không rõ';
-    }
-  };
-
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
@@ -58,55 +57,27 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
     </span>
   );
 
-  // Show loading state
-  if (loading) {
-    return (
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-        <div className="flex items-center justify-center space-x-2">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-          <span className="text-gray-600">Đang tải dữ liệu...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
-    return (
-      <div className="bg-white rounded-xl shadow-lg border border-red-200 p-8">
-        <div className="text-center">
-          <div className="text-red-600 mb-4">❌</div>
-          <h3 className="text-lg font-bold text-red-600 mb-2">Lỗi khi tải dữ liệu</h3>
-          <p className="text-red-500">{error}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="bg-gradient-to-r from-purple-50 to-pink-100 border-b-2 border-purple-200">
+            <TableRow className="bg-gradient-to-r from-blue-50 to-indigo-100 border-b-2 border-blue-200">
               <TableHead className="px-6 py-4 text-left font-bold text-gray-800 text-sm">💕 Họ hàng kết hôn</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">📊 Thông tin cơ bản</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⭐ Tài năng chính</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">🎯 Kỹ năng đặc biệt</TableHead>
               <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">💫 Chỉ số quan trọng</TableHead>
-              <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">🌟 Chỉ số bổ sung</TableHead>
-              {onEditMember && (
-                <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⚙️ Hành động</TableHead>
-              )}
+              <TableHead className="px-4 py-4 text-center font-bold text-gray-800 text-sm">⚙️ Hành động</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {marriedRelatives.map((member, idx) => (
-              <TableRow key={member.index} className={`hover:bg-purple-50 transition-all duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} border-b border-gray-100`}>
+            {(marriedRelatives || []).map((member, idx) => (
+              <TableRow key={member.index} className={`hover:bg-blue-50 transition-all duration-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/30'} border-b border-gray-100`}>
                 {/* Member Info Column */}
                 <TableCell className="px-6 py-5">
                   <div className="flex items-center space-x-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white">
                       <span className="text-white font-bold text-xl">
                         {member.name.charAt(0)}
                       </span>
@@ -167,18 +138,14 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
                 <TableCell className="px-4 py-5">
                   <div className="space-y-3">
                     <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-3 border border-purple-200">
-                      <div className="text-xs text-purple-600 font-medium mb-1">🌟 Loại tài năng</div>
-                      <div className="text-sm font-bold text-purple-700">{getTalentTypeName(member.talent)}</div>
-                      <div className="text-xs text-purple-600 mt-1">Mã: {member.talent}</div>
-                    </div>
-                    <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-lg p-3 border border-indigo-200">
-                      <div className="text-xs text-indigo-600 font-medium mb-1">💎 Giá trị tài năng</div>
-                      <StatBadge value={member.talentValue} />
+                      <div className="text-xs text-purple-600 font-semibold mb-1">🌟 Thiên phú</div>
+                      <div className="text-sm font-bold text-purple-800">{getTalentTypeName(member.talent)}</div>
+                      <div className="text-lg font-bold text-purple-900 mt-1">{member.talentValue}</div>
                     </div>
                     <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-3 border border-orange-200">
-                      <div className="text-xs text-orange-600 font-medium mb-1">🎯 Kỹ năng</div>
-                      <div className="text-sm font-bold text-orange-700">{getSkillTypeName(member.skillType)}</div>
-                      <div className="text-xs text-orange-600 mt-1">Cấp độ: {member.skillType}</div>
+                      <div className="text-xs text-orange-600 font-semibold mb-1">🎯 Kỹ năng</div>
+                      <div className="text-sm font-bold text-orange-800">{getSkillTypeName(member.skillType)}</div>
+                      <div className="text-lg font-bold text-orange-900 mt-1">{member.skillType}</div>
                     </div>
                   </div>
                 </TableCell>
@@ -187,57 +154,49 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
                 <TableCell className="px-4 py-5">
                   <div className="grid grid-cols-2 gap-2">
                     <div className="bg-blue-50 rounded-lg p-2 text-center border border-blue-200">
-                      <div className="text-xs text-blue-600 font-medium mb-1">📈 Danh tiếng</div>
+                      <div className="text-xs text-blue-600 font-medium mb-1">🏆 Danh tiếng</div>
                       <StatBadge value={member.reputation} />
                     </div>
                     <div className="bg-green-50 rounded-lg p-2 text-center border border-green-200">
-                      <div className="text-xs text-green-600 font-medium mb-1">🍀 Vận may</div>
+                      <div className="text-xs text-green-600 font-medium mb-1">🍀 May mắn</div>
                       <StatBadge value={member.luck} />
                     </div>
-                    <div className="bg-yellow-50 rounded-lg p-2 text-center border border-yellow-200">
-                      <div className="text-xs text-yellow-600 font-medium mb-1">😊 Tâm trạng</div>
-                      <StatBadge value={member.mood} />
-                    </div>
-                  </div>
-                </TableCell>
-
-                {/* Additional Stats Column */}
-                <TableCell className="px-4 py-5">
-                  <div className="grid grid-cols-1 gap-2">
-                    <div className="bg-pink-50 rounded-lg p-2 text-center border border-pink-200">
-                      <div className="text-xs text-pink-600 font-medium mb-1">💖 Mị lực</div>
-                      <StatBadge value={member.charm} />
-                    </div>
-                    <div className="bg-teal-50 rounded-lg p-2 text-center border border-teal-200">
-                      <div className="text-xs text-teal-600 font-medium mb-1">💚 Sức khỏe</div>
+                    <div className="bg-rose-50 rounded-lg p-2 text-center border border-rose-200">
+                      <div className="text-xs text-rose-600 font-medium mb-1">❤️ Sức khỏe</div>
                       <StatBadge value={member.health} />
                     </div>
+                    <div className="bg-pink-50 rounded-lg p-2 text-center border border-pink-200">
+                      <div className="text-xs text-pink-600 font-medium mb-1">✨ Quyến rũ</div>
+                      <StatBadge value={member.charm} />
+                    </div>
+                    <div className="bg-yellow-50 rounded-lg p-2 text-center border border-yellow-200">
+                      <div className="text-xs text-yellow-600 font-medium mb-1">� Tâm trạng</div>
+                      <StatBadge value={member.mood} />
+                    </div>
                     <div className="bg-indigo-50 rounded-lg p-2 text-center border border-indigo-200">
-                      <div className="text-xs text-indigo-600 font-medium mb-1">🧠 Mưu lượt</div>
+                      <div className="text-xs text-indigo-600 font-medium mb-1">🧠 Chiến lược</div>
                       <StatBadge value={member.strategy} />
                     </div>
                   </div>
                 </TableCell>
 
                 {/* Action Column */}
-                {onEditMember && (
-                  <TableCell className="px-4 py-5 text-center">
-                    <Button
-                      onClick={() => onEditMember(member)}
-                      variant="outline"
-                      size="sm"
-                      className="hover:bg-purple-100 hover:border-purple-400 hover:text-purple-700 transition-all duration-200 font-semibold shadow-sm"
-                    >
-                      ✏️ Chỉnh sửa
-                    </Button>
-                  </TableCell>
-                )}
+                <TableCell className="px-4 py-5 text-center">
+                  <Button
+                    onClick={() => onEditMember(member)}
+                    variant="outline"
+                    size="sm"
+                    className="hover:bg-blue-100 hover:border-blue-400 hover:text-blue-700 transition-all duration-200 font-semibold shadow-sm"
+                  >
+                    ✏️ Chỉnh sửa
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
         
-        {marriedRelatives.length === 0 && (
+        {(!marriedRelatives || marriedRelatives.length === 0) && (
           <div className="text-center py-16">
             <div className="text-gray-400 mb-4">
               <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">

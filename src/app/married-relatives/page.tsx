@@ -85,6 +85,7 @@ export default function MarriedRelativesPage() {
       </div>
 
       <MarriedRelativesTable 
+        marriedRelatives={marriedRelatives}
         onEditMember={handleEditMember}
       />
     </div>
