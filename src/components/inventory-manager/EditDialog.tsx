@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { getItemName, searchItems } from '@/data/items'
+import { getItemName, getItemCategory, searchItems } from '@/data/items'
 import { SearchIcon } from 'lucide-react'
 import { InventoryItem } from './useInventoryManagerData'
 
@@ -74,6 +74,7 @@ export function EditDialog({ item, isOpen, onClose, onSave, isNew = false, inven
       index: item?.index || 0,
       itemId: parsedItemId,
       itemName: getItemName(parsedItemId),
+      category: getItemCategory(parsedItemId),
       quantity: parsedQuantity
     }
 
@@ -135,8 +136,9 @@ export function EditDialog({ item, isOpen, onClose, onSave, isNew = false, inven
                 className="mt-1"
               />
               {itemId && (
-                <div className="text-xs text-gray-600 mt-1">
-                  Tên: {getItemName(parseInt(itemId) || 0)}
+                <div className="text-xs text-gray-600 mt-1 space-y-1">
+                  <div>Tên: {getItemName(parseInt(itemId) || 0)}</div>
+                  <div>Danh mục: <span className="inline-block px-1.5 py-0.5 text-xs bg-blue-100 text-blue-800 rounded">{getItemCategory(parseInt(itemId) || 0)}</span></div>
                 </div>
               )}
             </div>

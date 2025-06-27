@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getItemName } from '@/data/items'
+import { getItemName, getItemCategory } from '@/data/items'
 
 export interface InventoryItem {
   index: number
   itemId: number
   itemName: string
+  category: string
   quantity: number
 }
 
@@ -95,11 +96,13 @@ export const useInventoryManagerData = () => {
 
         // Get item name from items.ts using the ID
         const itemName = getItemName(itemId);
+        const itemCategory = getItemCategory(itemId);
 
         return {
           index: index,
           itemId: itemId,
           itemName: itemName,
+          category: itemCategory,
           quantity: quantity
         }
       }).filter((item: InventoryItem | null): item is InventoryItem => item !== null)

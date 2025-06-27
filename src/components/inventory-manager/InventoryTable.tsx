@@ -18,10 +18,14 @@ interface InventoryTableProps {
 
 export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuantity }: InventoryTableProps) {
   const [searchFilter, setSearchFilter] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [editingQuantity, setEditingQuantity] = useState<{index: number, value: string} | null>(null)
-  const [sortField, setSortField] = useState<'id' | 'name' | 'quantity'>('id')
+  const [sortField, setSortField] = useState<'id' | 'name' | 'quantity' | 'category'>('id')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
   const [filterType, setFilterType] = useState<'all' | 'unknown' | 'duplicates'>('all')
+
+  // Get all available categories from inventory items
+  const availableCategories = Array.from(new Set(inventoryItems.map(item => item.category))).sort()
 
   // Sort and filter items
   const processedItems = inventoryItems
@@ -30,6 +34,13 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
       if (searchFilter) {
         return item.itemName.toLowerCase().includes(searchFilter.toLowerCase()) ||
                item.itemId.toString().includes(searchFilter)
+      }
+      return true
+    })
+    // Apply category filter
+    .filter(item => {
+      if (categoryFilter !== 'all') {
+        return item.category === categoryFilter
       }
       return true
     })
@@ -56,6 +67,9 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
         case 'name':
           comparison = a.itemName.localeCompare(b.itemName, 'vi')
           break
+        case 'category':
+          comparison = a.category.localeCompare(b.category, 'vi')
+          break
         case 'quantity':
           comparison = a.quantity - b.quantity
           break
@@ -64,7 +78,7 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
       return sortDirection === 'asc' ? comparison : -comparison
     })
 
-  const handleSort = (field: 'id' | 'name' | 'quantity') => {
+  const handleSort = (field: 'id' | 'name' | 'quantity' | 'category') => {
     if (sortField === field) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
@@ -73,7 +87,7 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
     }
   }
 
-  const getSortIcon = (field: 'id' | 'name' | 'quantity') => {
+  const getSortIcon = (field: 'id' | 'name' | 'quantity' | 'category') => {
     if (sortField !== field) return null
     return sortDirection === 'asc' ? 
       <ArrowUpIcon className="w-3 h-3 ml-1 inline" /> : 
@@ -141,6 +155,21 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
           </SelectContent>
         </Select>
 
+        {/* Category filter */}
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Lọc theo danh mục" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tất cả danh mục</SelectItem>
+            {availableCategories.map(category => (
+              <SelectItem key={category} value={category}>
+                {category}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
         {/* Items count */}
         <div className="text-sm text-gray-500">
           Hiển thị {processedItems.length} / {inventoryItems.length} vật phẩm
@@ -166,6 +195,12 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
                 Tên vật phẩm {getSortIcon('name')}
               </TableHead>
               <TableHead 
+                className="w-32 cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('category')}
+              >
+                Danh mục {getSortIcon('category')}
+              </TableHead>
+              <TableHead 
                 className="w-24 text-right cursor-pointer hover:bg-gray-100"
                 onClick={() => handleSort('quantity')}
               >
@@ -177,8 +212,8 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
           <TableBody>
             {processedItems.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                  {searchFilter || filterType !== 'all' ? 'Không tìm thấy vật phẩm nào' : 'Chưa có vật phẩm nào'}
+                <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                  {searchFilter || filterType !== 'all' || categoryFilter !== 'all' ? 'Không tìm thấy vật phẩm nào' : 'Chưa có vật phẩm nào'}
                 </TableCell>
               </TableRow>
             ) : (
@@ -202,6 +237,11 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
                     {item.itemName === 'Unknown Item' && (
                       <div className="text-xs text-red-500">Vật phẩm không xác định</div>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                      {item.category}
+                    </span>
                   </TableCell>
                   <TableCell className="text-right font-mono">
                     {editingQuantity && editingQuantity.index === item.index ? (

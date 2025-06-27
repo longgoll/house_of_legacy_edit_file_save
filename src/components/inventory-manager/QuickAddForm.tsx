@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { PlusIcon } from 'lucide-react'
-import { getItemName } from '@/data/items'
+import { getItemName, getItemCategory } from '@/data/items'
 import { InventoryItem } from './useInventoryManagerData'
 
 interface QuickAddFormProps {
@@ -89,7 +89,8 @@ export function QuickAddForm({
         
         {quickAddId && (
           <div className="text-xs text-gray-600 bg-blue-50 p-2 rounded border-l-2 border-blue-300">
-            <strong>Tên:</strong> {getItemName(parseInt(quickAddId) || 0)}
+            <div><strong>Tên:</strong> {getItemName(parseInt(quickAddId) || 0)}</div>
+            <div><strong>Danh mục:</strong> <span className="inline-block px-1.5 py-0.5 text-xs bg-blue-100 text-blue-800 rounded">{getItemCategory(parseInt(quickAddId) || 0)}</span></div>
             {isDuplicate && (
               <div className="text-orange-600 font-medium mt-1">
                 ⚠️ Vật phẩm đã tồn tại - chỉ có thể chỉnh sửa số lượng
