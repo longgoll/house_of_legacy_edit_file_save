@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { ExportButton } from "@/components/ui/export-button";
 import { QRWelcomeDialog } from "@/components/ui/qr-welcome-dialog";
+import { toast } from 'sonner';
 
 interface MenuOption {
   id: string;
@@ -134,7 +135,7 @@ export default function MenuPage() {
 
   const handleMenuClick = (option: MenuOption) => {
     if (!option.available) {
-      alert("Chức năng này đang được phát triển!");
+      toast.info("Chức năng này đang được phát triển!");
       return;
     }
 

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { getItemName } from '../../data/items';
+import { toast } from 'sonner';
 
 interface ItemBatchLookupProps {
   className?: string;
@@ -50,7 +51,7 @@ export function ItemBatchLookup({ className }: ItemBatchLookupProps) {
       .map(result => `${result.id}\t${result.name}`)
       .join('\n');
     navigator.clipboard.writeText(text);
-    alert('Đã copy kết quả vào clipboard!');
+    toast.success('Đã copy kết quả vào clipboard!');
   };
 
   return (

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Copy, Download, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { QRDownloadDialog } from '@/components/ui/qr-download-dialog'
+import { toast } from 'sonner'
 
 export default function RawDataPage() {
   const [gameData, setGameData] = useState<Record<string, unknown> | null>(null)
@@ -49,10 +50,10 @@ export default function RawDataPage() {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(filteredData)
-      alert('Đã sao chép dữ liệu vào clipboard!')
+      toast.success('Đã sao chép dữ liệu vào clipboard!')
     } catch (error) {
       console.error('Error copying to clipboard:', error)
-      alert('Không thể sao chép dữ liệu!')
+      toast.error('Không thể sao chép dữ liệu!')
     }
   }
 

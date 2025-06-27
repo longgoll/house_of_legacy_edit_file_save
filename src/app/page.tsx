@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { QRSuccessDialog } from "@/components/ui/qr-success-dialog";
 import { BackupWarningDialog } from "@/components/ui/backup-warning-dialog";
+import { toast } from 'sonner';
 
 export default function Home() {
   const [dragActive, setDragActive] = useState(false);
@@ -37,7 +38,7 @@ export default function Home() {
       setShowSuccessDialog(true);
     } catch (error) {
       console.error('Error parsing GameData.es3:', error);
-      alert('Error parsing GameData.es3 file. Please make sure it\'s a valid JSON file.');
+      toast.error('Error parsing GameData.es3 file. Please make sure it\'s a valid JSON file.');
     }
   }, []);
 
