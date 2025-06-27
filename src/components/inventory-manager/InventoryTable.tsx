@@ -5,7 +5,8 @@ import { toast } from 'sonner'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { EditIcon, TrashIcon, SearchIcon } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { EditIcon, TrashIcon, SearchIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react'
 import { InventoryItem } from './useInventoryManagerData'
 
 interface InventoryTableProps {
@@ -18,12 +19,66 @@ interface InventoryTableProps {
 export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuantity }: InventoryTableProps) {
   const [searchFilter, setSearchFilter] = useState('')
   const [editingQuantity, setEditingQuantity] = useState<{index: number, value: string} | null>(null)
+  const [sortField, setSortField] = useState<'id' | 'name' | 'quantity'>('id')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  const [filterType, setFilterType] = useState<'all' | 'unknown' | 'duplicates'>('all')
 
-  // Filter items based on search
-  const filteredItems = inventoryItems.filter(item =>
-    item.itemName.toLowerCase().includes(searchFilter.toLowerCase()) ||
-    item.itemId.toString().includes(searchFilter)
-  )
+  // Sort and filter items
+  const processedItems = inventoryItems
+    // First apply search filter
+    .filter(item => {
+      if (searchFilter) {
+        return item.itemName.toLowerCase().includes(searchFilter.toLowerCase()) ||
+               item.itemId.toString().includes(searchFilter)
+      }
+      return true
+    })
+    // Then apply type filter
+    .filter(item => {
+      switch (filterType) {
+        case 'unknown':
+          return item.itemName === 'Unknown Item'
+        case 'duplicates':
+          return inventoryItems.filter(i => i.itemId === item.itemId).length > 1
+        case 'all':
+        default:
+          return true
+      }
+    })
+    // Finally sort
+    .sort((a, b) => {
+      let comparison = 0
+      
+      switch (sortField) {
+        case 'id':
+          comparison = a.itemId - b.itemId
+          break
+        case 'name':
+          comparison = a.itemName.localeCompare(b.itemName, 'vi')
+          break
+        case 'quantity':
+          comparison = a.quantity - b.quantity
+          break
+      }
+      
+      return sortDirection === 'asc' ? comparison : -comparison
+    })
+
+  const handleSort = (field: 'id' | 'name' | 'quantity') => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortField(field)
+      setSortDirection('asc')
+    }
+  }
+
+  const getSortIcon = (field: 'id' | 'name' | 'quantity') => {
+    if (sortField !== field) return null
+    return sortDirection === 'asc' ? 
+      <ArrowUpIcon className="w-3 h-3 ml-1 inline" /> : 
+      <ArrowDownIcon className="w-3 h-3 ml-1 inline" />
+  }
 
   const handleQuantityClick = (item: InventoryItem) => {
     setEditingQuantity({ index: item.index, value: item.quantity.toString() })
@@ -61,15 +116,35 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
 
   return (
     <div className="space-y-4">
-      {/* Search filter */}
-      <div className="relative max-w-sm">
-        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-        <Input
-          placeholder="Tìm kiếm theo tên hoặc ID..."
-          value={searchFilter}
-          onChange={(e) => setSearchFilter(e.target.value)}
-          className="pl-10"
-        />
+      {/* Filters and search */}
+      <div className="flex flex-wrap gap-4 items-center">
+        {/* Search filter */}
+        <div className="relative flex-1 min-w-64">
+          <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Tìm kiếm theo tên hoặc ID..."
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        {/* Type filter */}
+        <Select value={filterType} onValueChange={(value: 'all' | 'unknown' | 'duplicates') => setFilterType(value)}>
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Bộ lọc" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tất cả vật phẩm</SelectItem>
+            <SelectItem value="unknown">Vật phẩm không xác định</SelectItem>
+            <SelectItem value="duplicates">ID trùng lặp</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Items count */}
+        <div className="text-sm text-gray-500">
+          Hiển thị {processedItems.length} / {inventoryItems.length} vật phẩm
+        </div>
       </div>
 
       {/* Items table */}
@@ -78,21 +153,36 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
           <TableHeader>
             <TableRow>
               <TableHead className="w-16">STT</TableHead>
-              <TableHead className="w-20">ID</TableHead>
-              <TableHead>Tên vật phẩm</TableHead>
-              <TableHead className="w-24 text-right">Số lượng</TableHead>
+              <TableHead 
+                className="w-20 cursor-pointer hover:bg-gray-100" 
+                onClick={() => handleSort('id')}
+              >
+                ID {getSortIcon('id')}
+              </TableHead>
+              <TableHead 
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('name')}
+              >
+                Tên vật phẩm {getSortIcon('name')}
+              </TableHead>
+              <TableHead 
+                className="w-24 text-right cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('quantity')}
+              >
+                Số lượng {getSortIcon('quantity')}
+              </TableHead>
               <TableHead className="w-24 text-center">Thao tác</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredItems.length === 0 ? (
+            {processedItems.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                  {searchFilter ? 'Không tìm thấy vật phẩm nào' : 'Chưa có vật phẩm nào'}
+                  {searchFilter || filterType !== 'all' ? 'Không tìm thấy vật phẩm nào' : 'Chưa có vật phẩm nào'}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredItems.map((item, displayIndex) => (
+              processedItems.map((item, displayIndex) => (
                 <TableRow key={item.index} className="hover:bg-gray-50">
                   <TableCell className="font-medium">
                     {displayIndex + 1}
@@ -124,7 +214,7 @@ export function InventoryTable({ inventoryItems, onEdit, onDelete, onUpdateQuant
                             if (e.key === 'Enter') handleQuantitySave()
                             if (e.key === 'Escape') handleQuantityCancel()
                           }}
-                          className="w-20 h-7 text-right"
+                          className="w-32 h-7 text-right"
                           autoFocus
                         />
                         <Button size="sm" variant="ghost" onClick={handleQuantitySave} className="h-7 w-7 p-0">
