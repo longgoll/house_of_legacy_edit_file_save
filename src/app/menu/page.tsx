@@ -192,7 +192,7 @@ export default function MenuPage() {
                   }`}
                 ></div>
                 <Card
-                  className={`relative cursor-pointer transition-all duration-300 border border-slate-200/50 dark:border-slate-800/50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shadow-lg hover:shadow-2xl ${
+                  className={`relative cursor-pointer transition-all duration-300 border border-slate-200/50 dark:border-slate-800/50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shadow-lg hover:shadow-2xl min-h-[200px] ${
                     !option.available
                       ? "opacity-60"
                       : "hover:scale-105 hover:-translate-y-2"
