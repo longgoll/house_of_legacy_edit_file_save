@@ -197,9 +197,9 @@ export const useInventoryManagerData = () => {
         // Helper function to update value in the array
         const updateValue = (index: number, newValue: number) => {
           if (itemArray[index] && typeof itemArray[index] === 'object' && 'value' in itemArray[index]) {
-            (itemArray[index] as { value: number }).value = newValue;
+            (itemArray[index] as { value: string }).value = newValue.toString();
           } else {
-            itemArray[index] = newValue;
+            itemArray[index] = newValue.toString();
           }
         };
 
@@ -255,7 +255,7 @@ export const useInventoryManagerData = () => {
       }
 
       // Add new item to the array
-      const newItemData = [itemId, quantity];
+      const newItemData = [itemId.toString(), quantity.toString()];
       inventoryArray.push(newItemData);
 
       // Save back to sessionStorage
