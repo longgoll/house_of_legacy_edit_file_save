@@ -44,8 +44,11 @@ export default function Home() {
   const addFiles = useCallback((newFiles: File[]) => {
     setFiles(prev => [...prev, ...newFiles]);
     
-    // Check if any of the new files is GameData.es3
-    const gameDataFile = newFiles.find(file => file.name === 'GameData.es3');
+    // Check if any of the new files is GameData file (case-insensitive, flexible naming)
+    const gameDataFile = newFiles.find(file => 
+      file.name.toLowerCase().includes('gamedata') && 
+      file.name.toLowerCase().endsWith('.es3')
+    );
     if (gameDataFile) {
       handleGameDataFile(gameDataFile);
     }
@@ -120,20 +123,41 @@ export default function Home() {
                       <FileText className="h-6 w-6 text-white" />
                     </div>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div>
-                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">📁 Hướng dẫn sử dụng</h3>
-                      <p className="text-slate-700 dark:text-slate-300">
-                        Upload file <code className="bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded font-mono text-sm">GameData.es3</code> để truy cập đầy đủ tính năng quản lý game
-                      </p>
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">📁 Hướng dẫn tìm file GameData.es3</h3>
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300">
+                        <p>
+                          <strong>Bước 1:</strong> Mở Windows Explorer (File Explorer)
+                        </p>
+                        <p>
+                          <strong>Bước 2:</strong> Dán đường dẫn sau vào thanh địa chỉ:
+                        </p>
+                        <code className="block bg-blue-50 dark:bg-blue-900/30 px-3 py-2 rounded-lg font-mono text-sm border border-blue-200 dark:border-blue-800 my-2">
+                          %USERPROFILE%\AppData\LocalLow\S3Studio\House of Legacy\FW
+                        </code>
+                        <p>
+                          <strong>Bước 3:</strong> Bạn sẽ thấy các thư mục số như: <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">0</code>, <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">1</code>, <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">2</code>, <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">3</code>...
+                        </p>
+                        <p className="text-sm text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-200 dark:border-amber-800">
+                          💡 <strong>Mẹo:</strong> Mỗi thư mục số là 1 file save của game. Thư mục <code>0</code> là save đầu tiên, <code>1</code> là save thứ hai...
+                        </p>
+                        <p>
+                          <strong>Bước 4:</strong> Mở thư mục của save game bạn muốn chỉnh sửa
+                        </p>
+                        <p>
+                          <strong>Bước 5:</strong> Tìm file <code className="bg-green-100 dark:bg-green-900/50 px-2 py-1 rounded font-mono text-sm">GameData.es3</code> và upload lên đây
+                        </p>
+                      </div>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">📍 Vị trí file</h3>
-                      <p className="text-slate-700 dark:text-slate-300">
-                        <code className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded font-mono text-sm break-all">
-                          C:\Users\User\AppData\LocalLow\S3Studio\House of Legacy\FW
-                        </code>
-                      </p>
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">⚠️ Lưu ý quan trọng</h3>
+                      <div className="space-y-2">
+                        <div className="text-sm text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg border border-orange-200 dark:border-orange-800">
+                          <p className="font-medium mb-1">💾 Nhớ backup file gốc!</p>
+                          <p>Sao chép file GameData.es3 gốc sang nơi khác trước khi ghi đè file đã chỉnh sửa, để có thể khôi phục nếu cần.</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
