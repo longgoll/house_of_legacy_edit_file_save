@@ -1,228 +1,247 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Coins, Users, Settings, FileText, Crown, Shield, Sword } from 'lucide-react'
-import { ExportButton } from '@/components/ui/export-button'
-import { QRWelcomeDialog } from '@/components/ui/qr-welcome-dialog'
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Coins,
+  Users,
+  FileText,
+  Crown,
+  Shield,
+  Sword,
+  Package,
+  CheckCircle,
+} from "lucide-react";
+import { ExportButton } from "@/components/ui/export-button";
+import { QRWelcomeDialog } from "@/components/ui/qr-welcome-dialog";
+import { toast } from 'sonner';
 
 interface MenuOption {
-  id: string
-  title: string
-  description: string
-  icon: React.ReactNode
-  href: string
-  available: boolean
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  href: string;
+  available: boolean;
 }
 
 interface GameData {
   CGNum?: {
-    value?: string[]
-  }
-  [key: string]: unknown
+    value?: string[];
+  };
+  [key: string]: unknown;
 }
 
 export default function MenuPage() {
-  const [gameData, setGameData] = useState<GameData | null>(null)
-  const [fileName, setFileName] = useState<string>('')
-  const [showWelcomeDialog, setShowWelcomeDialog] = useState(false)
+  const [gameData, setGameData] = useState<GameData | null>(null);
+  const [fileName, setFileName] = useState<string>("");
+  const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
 
   useEffect(() => {
     // Read data from sessionStorage instead of URL parameters
-    const storedGameData = sessionStorage.getItem('gameData')
-    const storedFileName = sessionStorage.getItem('fileName')
-    
+    const storedGameData = sessionStorage.getItem("gameData");
+    const storedFileName = sessionStorage.getItem("fileName");
+
     if (storedGameData) {
       try {
-        const parsedData = JSON.parse(storedGameData)
-        setGameData(parsedData)
-        setFileName(storedFileName || 'GameData.es3')
-        
+        const parsedData = JSON.parse(storedGameData);
+        setGameData(parsedData);
+        setFileName(storedFileName || "GameData.es3");
+
         // Show welcome dialog if first time visiting menu
-        const hasVisitedMenu = sessionStorage.getItem('hasVisitedMenu')
+        const hasVisitedMenu = sessionStorage.getItem("hasVisitedMenu");
         if (!hasVisitedMenu) {
-          setShowWelcomeDialog(true)
-          sessionStorage.setItem('hasVisitedMenu', 'true')
+          setShowWelcomeDialog(true);
+          sessionStorage.setItem("hasVisitedMenu", "true");
         }
       } catch (error) {
-        console.error('Error parsing stored game data:', error)
+        console.error("Error parsing stored game data:", error);
       }
     }
-  }, [])
+  }, []);
 
   const menuOptions: MenuOption[] = [
     {
-      id: 'currency',
-      title: 'Quản lý tiền tệ',
-      description: 'Chỉnh sửa số tiền và vàng trong game',
+      id: "currency",
+      title: "Quản lý tiền tệ",
+      description: "Chỉnh sửa số tiền và vàng trong game",
       icon: <Coins className="h-6 w-6" />,
-      href: '/currency-manager',
-      available: true
+      href: "/currency-manager",
+      available: true,
     },
     {
-      id: 'family-members',
-      title: 'Thành viên gia đình',
-      description: 'Quản lý các thành viên trực hệ trong gia đình',
+      id: "family-members",
+      title: "Thành viên gia đình",
+      description: "Quản lý các thành viên trực hệ trong gia đình",
       icon: <Users className="h-6 w-6" />,
-      href: '/family-members',
-      available: true
+      href: "/family-members",
+      available: true,
     },
     {
-      id: 'married-relatives',
-      title: 'Người thân kết hôn',
-      description: 'Quản lý những người thân đã kết hôn hoặc đang kết hôn',
+      id: "married-relatives",
+      title: "Người thân kết hôn",
+      description: "Quản lý những người thân đã kết hôn hoặc đang kết hôn",
       icon: <Crown className="h-6 w-6" />,
-      href: '/married-relatives',
-      available: true
+      href: "/married-relatives",
+      available: true,
     },
     {
-      id: 'servants',
-      title: 'Môn khách',
-      description: 'Quản lý các môn khách',
+      id: "servants",
+      title: "Môn khách",
+      description: "Quản lý các môn khách",
       icon: <Shield className="h-6 w-6" />,
-      href: '/servants',
-      available: true
+      href: "/servants",
+      available: true,
     },
     {
-      id: 'character',
-      title: 'Quản lý kho đồ',
-      description: 'Chỉnh sửa thông tin kho đồ',
+      id: "inventory",
+      title: "Quản lý kho đồ",
+      description: "Chỉnh sửa thông tin kho đồ",
       icon: <Sword className="h-6 w-6" />,
-      href: '/character-management',
-      available: false
+      href: "/inventory-manager",
+      available: true,
     },
     {
-      id: 'family-info',
-      title: 'Thông tin gia tộc',
-      description: 'Xem thông tin chi tiết về gia tộc',
+      id: "item-manager",
+      title: "Tra cứu vật phẩm",
+      description: "Tra cứu thông tin vật phẩm theo ID hoặc tên",
+      icon: <Package className="h-6 w-6" />,
+      href: "/item-manager",
+      available: true,
+    },
+    {
+      id: "family-info",
+      title: "Thông tin gia tộc",
+      description: "Xem thông tin chi tiết về gia tộc",
       icon: <Users className="h-6 w-6" />,
-      href: '/family-info',
-      available: true
+      href: "/family-info",
+      available: true,
     },
     {
-      id: 'data',
-      title: 'Xem dữ liệu thô',
-      description: 'Xem toàn bộ dữ liệu JSON từ file',
+      id: "data",
+      title: "Xem dữ liệu thô",
+      description: "Xem toàn bộ dữ liệu JSON từ file",
       icon: <FileText className="h-6 w-6" />,
-      href: '/raw-data',
-      available: true
-    }
-  ]
+      href: "/raw-data",
+      available: true,
+    },
+  ];
 
   const handleMenuClick = (option: MenuOption) => {
     if (!option.available) {
-      alert('Chức năng này đang được phát triển!')
-      return
+      toast.info("Chức năng này đang được phát triển!");
+      return;
     }
 
-    if (option.id === 'currency' && gameData?.CGNum?.value) {
-      const money = gameData.CGNum.value[0] || '0'
-      const gold = gameData.CGNum.value[1] || '0'
+    if (option.id === "currency" && gameData?.CGNum?.value) {
+      const money = gameData.CGNum.value[0] || "0";
+      const gold = gameData.CGNum.value[1] || "0";
       // Store currency data for currency-manager page
-      sessionStorage.setItem('currentMoney', money)
-      sessionStorage.setItem('currentGold', gold)
-      window.location.href = option.href
+      sessionStorage.setItem("currentMoney", money);
+      sessionStorage.setItem("currentGold", gold);
+      window.location.href = option.href;
+    } else if (option.id === "item-manager") {
+      // Item manager doesn't need game data, go directly
+      window.location.href = option.href;
     } else {
       // For other pages, data is already in sessionStorage
-      window.location.href = option.href
+      window.location.href = option.href;
     }
-  }
+  };
 
   return (
-    <div className="container mx-auto p-6 pt-8">
-      <div className="max-w-4xl mx-auto">
-        {fileName && (
-          <div className="mb-6 text-center">
-            <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 px-4 py-2 rounded-full inline-block border border-green-200 dark:border-green-800">
-              ✓ Đã tải file: {fileName}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="container mx-auto p-6 pt-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="flex items-center justify-between py-2 mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm text-slate-600 dark:text-slate-400">
+                Menu
+              </span>
             </div>
-            {gameData && (
-              <div className="mt-3">
-                <ExportButton className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-200" />
+            {fileName && (
+              <div className="flex items-center px-2 py-1 bg-green-50 dark:bg-green-900/20 rounded text-green-600 dark:text-green-400 text-xs">
+                <CheckCircle className="h-3 w-3 mr-1" />
+                {fileName}
               </div>
             )}
           </div>
-        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {menuOptions.map((option) => (
-            <Card 
-              key={option.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-lg border-0 bg-white/80 backdrop-blur-sm ${
-                !option.available ? 'opacity-60' : 'hover:scale-105'
-              }`}
-              onClick={() => handleMenuClick(option)}
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className={`rounded-full p-2 ${
-                    option.available 
-                      ? 'bg-blue-100 text-blue-600' 
-                      : 'bg-gray-100 text-gray-400'
-                  }`}>
-                    {option.icon}
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
-                      {option.title}
-                      {!option.available && (
-                        <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">
-                          Sắp có
-                        </span>
-                      )}
-                    </CardTitle>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-slate-600">
-                  {option.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          {/* Export Button */}
+          {gameData && (
+            <div className="flex justify-center mb-8">
+              <ExportButton className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" />
+            </div>
+          )}
 
-        {/* Game Data Info */}
-        {gameData && (
-          <Card className="mt-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
-                <Settings className="h-5 w-5 text-gray-600" />
-                Thông tin file đã tải
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-lg font-bold text-green-700">
-                    {gameData.CGNum?.value?.[0] || 'N/A'}
-                  </div>
-                  <div className="text-sm text-green-600">Tiền (Money)</div>
-                </div>
-                <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                  <div className="text-lg font-bold text-yellow-700">
-                    {gameData.CGNum?.value?.[1] || 'N/A'}
-                  </div>
-                  <div className="text-sm text-yellow-600">Vàng (Gold)</div>
-                </div>
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-lg font-bold text-blue-700">
-                    {Object.keys(gameData).length}
-                  </div>
-                  <div className="text-sm text-blue-600">Tổng số thuộc tính</div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {menuOptions.map((option) => (
+              <div key={option.id} className="relative group">
+                <div
+                  className={`absolute inset-0 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+                    option.id === "currency"
+                      ? "bg-gradient-to-r from-green-600/10 to-emerald-600/10"
+                      : "bg-gradient-to-r from-blue-600/10 to-purple-600/10"
+                  }`}
+                ></div>
+                <Card
+                  className={`relative cursor-pointer transition-all duration-300 border border-slate-200/50 dark:border-slate-800/50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shadow-lg hover:shadow-2xl min-h-[200px] ${
+                    !option.available
+                      ? "opacity-60"
+                      : "hover:scale-105 hover:-translate-y-2"
+                  }`}
+                  onClick={() => handleMenuClick(option)}
+                >
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`relative rounded-2xl p-4 transition-all duration-300 ${
+                          option.available
+                            ? option.id === "currency"
+                              ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg group-hover:shadow-xl group-hover:scale-110"
+                              : "bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg group-hover:shadow-xl group-hover:scale-110"
+                            : "bg-gray-100 text-gray-400"
+                        }`}
+                      >
+                        {option.icon}
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-xl text-slate-800 dark:text-slate-200 flex items-center gap-3">
+                          {option.title}
+                          {!option.available && (
+                            <span className="text-xs bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full shadow-sm">
+                              Sắp có
+                            </span>
+                          )}
+                        </CardTitle>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+                      {option.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
-        )}
+            ))}
+          </div>
 
-        {/* Welcome Dialog */}
-        <QRWelcomeDialog 
-          open={showWelcomeDialog} 
-          onOpenChange={setShowWelcomeDialog} 
-        />
+          {/* Welcome Dialog */}
+          <QRWelcomeDialog
+            open={showWelcomeDialog}
+            onOpenChange={setShowWelcomeDialog}
+          />
+        </div>
       </div>
     </div>
-  )
+  );
 }

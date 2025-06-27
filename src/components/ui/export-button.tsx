@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Download } from 'lucide-react'
+import { toast } from 'sonner'
 import { FamilyMember } from '@/components/family-members'
 import { QRDownloadDialog } from '@/components/ui/qr-download-dialog'
 
@@ -29,7 +30,7 @@ export function ExportButton({
     const fileName = sessionStorage.getItem('fileName') || 'GameData_modified.es3'
     
     if (!gameDataString) {
-      alert('Không có dữ liệu để xuất!')
+      toast.error('Không có dữ liệu để xuất!')
       return
     }
 
@@ -78,10 +79,10 @@ export function ExportButton({
       URL.revokeObjectURL(url)
       
       console.log('Export completed successfully')
-      alert('File đã được xuất thành công!')
+      toast.success('File đã được xuất thành công!')
     } catch (error) {
       console.error('Lỗi khi xuất file:', error)
-      alert('Có lỗi xảy ra khi xuất file: ' + (error as Error).message)
+      toast.error('Có lỗi xảy ra khi xuất file: ' + (error as Error).message)
     }
   }
 

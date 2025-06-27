@@ -68,6 +68,22 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
     return isPatriarch === 1 ? 'Tộc trưởng' : 'Thành viên';
   };
 
+  const getHobbyName = (hobby: number): string => {
+    switch (hobby) {
+      case 0: return 'Hương phấn';
+      case 1: return 'Mực';
+      case 2: return 'Hội họa';
+      case 3: return 'Đồ cổ';
+      case 4: return 'Bộ trà';
+      case 5: return 'Hương';
+      case 6: return 'Bình';
+      case 7: return 'Rượu';
+      case 8: return 'Âm nhạc';
+      case 9: return 'Da';
+      default: return 'Không rõ';
+    }
+  };
+
   const getStatusName = (status: number): string => {
     switch (status) {
       case 0: return 'Khả dụng';
@@ -206,8 +222,8 @@ export const FamilyMembersTable: React.FC<FamilyMembersTableProps> = ({
                     </div>
                     <div className="mt-2 pt-2 border-t border-gray-200">
                       <span className="text-xs text-gray-600 font-medium">❤️ Sở thích:</span>
-                      <div className="text-sm text-gray-700 font-medium mt-1 truncate" title={member.hobby.toString()}>
-                        {member.hobby}
+                      <div className="text-sm text-gray-700 font-medium mt-1 truncate" title={getHobbyName(member.hobby)}>
+                        {getHobbyName(member.hobby)}
                       </div>
                     </div>
                   </div>

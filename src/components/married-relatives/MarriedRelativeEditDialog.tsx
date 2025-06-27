@@ -223,6 +223,34 @@ export const MarriedRelativeEditDialog: React.FC<MarriedRelativeEditDialogProps>
                         <span>Max: 100</span>
                       </div>
                     </div>
+
+                    {/* Hobby */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                        <span className="w-1 h-4 bg-green-500 rounded-full"></span>
+                        Sở thích
+                      </label>
+                      <Select value={editingMember.hobby.toString()} onValueChange={(value) => handleSelectChange('hobby', value)}>
+                        <SelectTrigger className="border-green-200 focus:border-green-500">
+                          <SelectValue placeholder="Chọn sở thích" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="0">Hương phấn</SelectItem>
+                          <SelectItem value="1">Mực</SelectItem>
+                          <SelectItem value="2">Hội họa</SelectItem>
+                          <SelectItem value="3">Đồ cổ</SelectItem>
+                          <SelectItem value="4">Bộ trà</SelectItem>
+                          <SelectItem value="5">Hương</SelectItem>
+                          <SelectItem value="6">Bình</SelectItem>
+                          <SelectItem value="7">Rượu</SelectItem>
+                          <SelectItem value="8">Âm nhạc</SelectItem>
+                          <SelectItem value="9">Da</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <div className="text-xs text-gray-500">
+                        Chọn sở thích phù hợp cho họ hàng
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

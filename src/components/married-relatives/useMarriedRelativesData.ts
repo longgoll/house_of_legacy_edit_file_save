@@ -12,6 +12,7 @@ export interface useMarriedRelativesData {
   lifespan: number // From index 5
   skillType: number // From index 6
   luck: number // From index 7
+  hobby: number // From index 10 - Sở thích
   age: number 
   literaryTalent: number
   martialTalent: number
@@ -150,6 +151,11 @@ export const useMemberQuData = () => {
           return getDataFromIndex2(item, 7) as number;
         };
 
+        // Extract hobby from index 2 using split (index 10 after split)
+        const getHobbyFromIndex2 = (item: unknown): number => {
+          return getDataFromIndex2(item, 10) as number;
+        };
+
         return {
           index: index,
           name: getNameFromIndex2(memberInfo[2]),
@@ -160,6 +166,7 @@ export const useMemberQuData = () => {
           lifespan: getLifespanFromIndex2(memberInfo[2]),
           skillType: getSkillTypeFromIndex2(memberInfo[2]),
           luck: getLuckFromIndex2(memberInfo[2]),
+          hobby: getHobbyFromIndex2(memberInfo[2]),
           age: Number(getValue(memberInfo[5])) || 0,
           literaryTalent: Number(getValue(memberInfo[6])) || 0,
           martialTalent: Number(getValue(memberInfo[7])) || 0,
@@ -300,7 +307,7 @@ export const useMemberQuData = () => {
             
             // Update based on new structure:
             // Index 0: name, Index 1: remove, Index 2: talent type, Index 3: talent value
-            // Index 4: gender, Index 5: lifespan, Index 6: skillType, Index 7: luck
+            // Index 4: gender, Index 5: lifespan, Index 6: skillType, Index 7: luck, Index 10: hobby
             updatedParts[0] = member.name;                    // 0: name
             // Index 1: removed (skip update to preserve original)
             updatedParts[2] = member.talent.toString();       // 2: talent type
@@ -309,6 +316,7 @@ export const useMemberQuData = () => {
             updatedParts[5] = member.lifespan.toString();     // 5: lifespan
             updatedParts[6] = member.skillType.toString();    // 6: skillType
             updatedParts[7] = member.luck.toString();         // 7: luck
+            updatedParts[10] = member.hobby.toString();        // 10: hobby (sở thích)
             // Keep any additional parts as they are (preserve original data)
             
             const updatedPipeString = updatedParts.join('|');

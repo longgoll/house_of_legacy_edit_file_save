@@ -43,6 +43,22 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
     return gender === 0 ? 'Nữ' : 'Nam';
   };
 
+  const getHobbyName = (hobby: number): string => {
+    switch (hobby) {
+      case 0: return 'Hương phấn';
+      case 1: return 'Mực';
+      case 2: return 'Hội họa';
+      case 3: return 'Đồ cổ';
+      case 4: return 'Bộ trà';
+      case 5: return 'Hương';
+      case 6: return 'Bình';
+      case 7: return 'Rượu';
+      case 8: return 'Âm nhạc';
+      case 9: return 'Da';
+      default: return 'Không rõ';
+    }
+  };
+
   // Helper function to get status color based on value
   const getStatColor = (value: number): string => {
     if (value >= 80) return 'text-green-600 bg-green-50 border-green-200';
@@ -108,6 +124,10 @@ export const MarriedRelativesTable: React.FC<MarriedRelativesTableProps> = ({
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-600 font-medium">⏰ Tuổi thọ:</span>
                       <span className="font-bold text-gray-900">{member.lifespan}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-gray-600 font-medium">🎯 Sở thích:</span>
+                      <span className="font-bold text-gray-900 text-xs">{getHobbyName(member.hobby)}</span>
                     </div>
                   </div>
                 </TableCell>
