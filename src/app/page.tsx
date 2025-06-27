@@ -92,120 +92,174 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto p-4 pt-8">
-      <div className="max-w-2xl mx-auto space-y-6">
-        {/* Info Banner */}
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-blue-700 dark:text-blue-300">
-            💡 <strong>Hướng dẫn:</strong> Upload file <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">GameData.es3</code> để truy cập menu quản lý game với nhiều tính năng hữu ích!
-          </p>
-          <p className="text-sm text-blue-700 dark:text-blue-300">
-            💡 <strong>Hướng dẫn:</strong> file được lưu ở  <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">C:\Users\User\AppData\LocalLow\S3Studio\House of Legacy\FW</code>
-          </p>
-        </div>
-
-        {/* Upload Area */}
-        <Card className="border-2 border-dashed transition-colors duration-200 hover:border-slate-400 dark:hover:border-slate-600">
-          <CardContent className="p-8">
-            <div
-              className={`relative flex flex-col items-center justify-center space-y-4 rounded-lg border-2 border-dashed p-8 transition-colors duration-200 ${
-                dragActive
-                  ? "border-blue-500 bg-blue-50 dark:bg-blue-950/20"
-                  : "border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600"
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
-              <div className="flex flex-col items-center space-y-4">
-                <div className="rounded-full bg-slate-100 dark:bg-slate-800 p-4">
-                  <Upload className="h-8 w-8 text-slate-600 dark:text-slate-400" />
-                </div>
-                <div className="text-center space-y-2">
-                  <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                    Kéo thả file vào đây
-                  </p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    hoặc click để chọn file
-                  </p>
-                </div>
-                <Button
-                  onClick={() => document.getElementById('fileInput')?.click()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  Chọn file
-                </Button>
-              </div>
-              <input
-                id="fileInput"
-                type="file"
-                multiple
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                onChange={handleFileInput}
-              />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="container mx-auto p-4 pt-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Hero Section */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">
+              🎮 House of Legacy Game Tool
             </div>
-          </CardContent>
-        </Card>
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+              Quản lý Game<br />
+              <span className="text-slate-700 dark:text-slate-300">Dễ dàng & Hiệu quả</span>
+            </h1>
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+              Công cụ mạnh mẽ giúp bạn quản lý và chỉnh sửa dữ liệu game House of Legacy một cách dễ dàng và an toàn
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            {/* Info Banner */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-2xl blur-xl"></div>
+              <div className="relative p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-blue-200/50 dark:border-blue-800/50 shadow-lg">
+                <div className="flex items-start space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">📁 Hướng dẫn sử dụng</h3>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        Upload file <code className="bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded font-mono text-sm">GameData.es3</code> để truy cập đầy đủ tính năng quản lý game
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">📍 Vị trí file</h3>
+                      <p className="text-slate-700 dark:text-slate-300">
+                        <code className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded font-mono text-sm break-all">
+                          C:\Users\User\AppData\LocalLow\S3Studio\House of Legacy\FW
+                        </code>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Upload Area */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5 rounded-3xl blur-2xl"></div>
+              <Card className="relative border-2 border-dashed border-slate-300 dark:border-slate-700 transition-all duration-300 hover:border-blue-400 dark:hover:border-blue-600 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm shadow-lg hover:shadow-xl">
+                <CardContent className="p-8">
+                  <div
+                    className={`relative flex flex-col items-center justify-center space-y-6 rounded-2xl border-2 border-dashed p-12 transition-all duration-300 ${
+                      dragActive
+                        ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/30 scale-105"
+                        : "border-slate-300 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600 hover:bg-slate-50/50 dark:hover:bg-slate-800/30"
+                    }`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                  >
+                    <div className="flex flex-col items-center space-y-6">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-lg opacity-30"></div>
+                        <div className="relative rounded-full bg-gradient-to-r from-blue-600 to-purple-600 p-6 shadow-lg">
+                          <Upload className="h-8 w-8 text-white" />
+                        </div>
+                      </div>
+                      <div className="text-center space-y-3">
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                          Kéo thả file vào đây
+                        </h3>
+                        <p className="text-slate-600 dark:text-slate-400 text-lg">
+                          hoặc click để chọn file từ máy tính
+                        </p>
+                        <p className="text-sm text-slate-500 dark:text-slate-500">
+                          Hỗ trợ file .es3 và các định dạng game khác
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => document.getElementById('fileInput')?.click()}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                      >
+                        Chọn file
+                      </Button>
+                    </div>
+                    <input
+                      id="fileInput"
+                      type="file"
+                      multiple
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={handleFileInput}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
         {/* File List */}
         {files.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                File đã tải lên ({files.length})
-              </CardTitle>
-              <CardDescription>
-                Danh sách các file bạn đã chọn
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {files.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="rounded-full bg-blue-100 dark:bg-blue-900 p-2">
-                      <FileText className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-slate-900 dark:text-slate-100 truncate max-w-xs">
-                        {file.name}
-                      </span>
-                      <span className="text-sm text-slate-600 dark:text-slate-400">
-                        {formatFileSize(file.size)}
-                      </span>
-                    </div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-green-600/5 to-blue-600/5 rounded-3xl blur-2xl"></div>
+            <Card className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <CheckCircle className="h-5 w-5 text-white" />
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeFile(index)}
-                    className="text-slate-600 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400"
+                  <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                    File đã tải lên ({files.length})
+                  </span>
+                </CardTitle>
+                <CardDescription>
+                  Danh sách các file bạn đã chọn để xử lý
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {files.map((file, index) => (
+                  <div
+                    key={index}
+                    className="group flex items-center justify-between p-4 bg-gradient-to-r from-slate-50/50 to-blue-50/30 dark:from-slate-800/50 dark:to-slate-700/30 rounded-xl border border-slate-200/50 dark:border-slate-700/50 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
                   >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              
-              {files.length > 0 && (
-                <div className="flex justify-between pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setFiles([])}
-                    className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
-                  >
-                    Xóa tất cả
-                  </Button>
-                  <Button className="bg-green-600 hover:bg-green-700 text-white">
-                    Xử lý file
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                    <div className="flex items-center space-x-4">
+                      <div className="rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 p-3 shadow-lg">
+                        <FileText className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-slate-900 dark:text-slate-100 truncate max-w-xs">
+                          {file.name}
+                        </span>
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                          {formatFileSize(file.size)}
+                        </span>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeFile(index)}
+                      className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 transition-all duration-300 hover:scale-110"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                
+                {files.length > 0 && (
+                  <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+                    <Button
+                      variant="outline"
+                      onClick={() => setFiles([])}
+                      className="flex-1 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800/50 dark:text-red-400 dark:hover:bg-red-950/20 transition-all duration-300"
+                    >
+                      <X className="h-4 w-4 mr-2" />
+                      Xóa tất cả
+                    </Button>
+                    <Button className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Xử lý file
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Success Dialog */}
@@ -219,6 +273,8 @@ export default function Home() {
           open={showBackupWarning}
           onOpenChange={setShowBackupWarning}
         />
+          </div>
+        </div>
       </div>
     </div>
   );

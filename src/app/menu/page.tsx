@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Coins, Users, Settings, FileText, Crown, Shield, Sword, Package } from 'lucide-react'
+import { Coins, Users, FileText, Crown, Shield, Sword, Package, CheckCircle } from 'lucide-react'
 import { ExportButton } from '@/components/ui/export-button'
 import { QRWelcomeDialog } from '@/components/ui/qr-welcome-dialog'
 
@@ -140,99 +140,119 @@ export default function MenuPage() {
   }
 
   return (
-    <div className="container mx-auto p-6 pt-8">
-      <div className="max-w-4xl mx-auto">
-        {fileName && (
-          <div className="mb-6 text-center">
-            <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 px-4 py-2 rounded-full inline-block border border-green-200 dark:border-green-800">
-              ✓ Đã tải file: {fileName}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="container mx-auto p-6 pt-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Header Section */}
+          <div className="flex items-center justify-between py-2 mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm text-slate-600 dark:text-slate-400">Menu</span>
             </div>
-            {gameData && (
-              <div className="mt-3">
-                <ExportButton className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-all duration-200" />
+            {fileName && (
+              <div className="flex items-center px-2 py-1 bg-green-50 dark:bg-green-900/20 rounded text-green-600 dark:text-green-400 text-xs">
+                <CheckCircle className="h-3 w-3 mr-1" />
+                {fileName}
               </div>
             )}
           </div>
-        )}
+
+          {/* Stats Overview */}
+          {gameData && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-green-400/20 to-blue-400/20 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">
+                    {gameData.CGNum?.value?.[0] || '0'}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">Tiền</div>
+                </div>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <div className="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-1">
+                    {gameData.CGNum?.value?.[1] || '0'}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">Vàng</div>
+                </div>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                    {Object.keys(gameData).filter(key => key.startsWith('FM')).length}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">Thành viên</div>
+                </div>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-indigo-400/20 rounded-2xl blur-lg opacity-50 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                    {Object.keys(gameData).length}
+                  </div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400">Tổng thuộc tính</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Export Button */}
+          {gameData && (
+            <div className="flex justify-center mb-8">
+              <ExportButton className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" />
+            </div>
+          )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {menuOptions.map((option) => (
-            <Card 
-              key={option.id}
-              className={`cursor-pointer transition-all duration-200 hover:shadow-lg border-0 bg-white/80 backdrop-blur-sm ${
-                !option.available ? 'opacity-60' : 'hover:scale-105'
-              }`}
-              onClick={() => handleMenuClick(option)}
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className={`rounded-full p-2 ${
-                    option.available 
-                      ? 'bg-blue-100 text-blue-600' 
-                      : 'bg-gray-100 text-gray-400'
-                  }`}>
-                    {option.icon}
+            <div key={option.id} className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <Card 
+                className={`relative cursor-pointer transition-all duration-300 border border-slate-200/50 dark:border-slate-800/50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shadow-lg hover:shadow-2xl ${
+                  !option.available ? 'opacity-60' : 'hover:scale-105 hover:-translate-y-2'
+                }`}
+                onClick={() => handleMenuClick(option)}
+              >
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-4">
+                    <div className={`relative rounded-2xl p-4 transition-all duration-300 ${
+                      option.available 
+                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg group-hover:shadow-xl group-hover:scale-110' 
+                        : 'bg-gray-100 text-gray-400'
+                    }`}>
+                      {option.icon}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-xl text-slate-800 dark:text-slate-200 flex items-center gap-3">
+                        {option.title}
+                        {!option.available && (
+                          <span className="text-xs bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full shadow-sm">
+                            Sắp có
+                          </span>
+                        )}
+                      </CardTitle>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
-                      {option.title}
-                      {!option.available && (
-                        <span className="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full">
-                          Sắp có
-                        </span>
-                      )}
-                    </CardTitle>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-slate-600">
-                  {option.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
+                    {option.description}
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
-
-        {/* Game Data Info */}
-        {gameData && (
-          <Card className="mt-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="text-xl text-slate-800 flex items-center gap-2">
-                <Settings className="h-5 w-5 text-gray-600" />
-                Thông tin file đã tải
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-lg font-bold text-green-700">
-                    {gameData.CGNum?.value?.[0] || 'N/A'}
-                  </div>
-                  <div className="text-sm text-green-600">Tiền (Money)</div>
-                </div>
-                <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                  <div className="text-lg font-bold text-yellow-700">
-                    {gameData.CGNum?.value?.[1] || 'N/A'}
-                  </div>
-                  <div className="text-sm text-yellow-600">Vàng (Gold)</div>
-                </div>
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-lg font-bold text-blue-700">
-                    {Object.keys(gameData).length}
-                  </div>
-                  <div className="text-sm text-blue-600">Tổng số thuộc tính</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Welcome Dialog */}
         <QRWelcomeDialog 
           open={showWelcomeDialog} 
           onOpenChange={setShowWelcomeDialog} 
         />
+        </div>
       </div>
     </div>
   )
