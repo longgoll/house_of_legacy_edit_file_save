@@ -17,9 +17,10 @@ interface EditDialogProps {
   onClose: () => void
   onSave: (item: InventoryItem) => void
   isNew?: boolean
+  inventoryItems: InventoryItem[]
 }
 
-function EditDialog({ item, isOpen, onClose, onSave, isNew = false }: EditDialogProps) {
+function EditDialog({ item, isOpen, onClose, onSave, isNew = false, inventoryItems }: EditDialogProps) {
   const [itemId, setItemId] = useState(item?.itemId?.toString() || '')
   const [quantity, setQuantity] = useState(item?.quantity?.toString() || '')
   const [searchQuery, setSearchQuery] = useState('')
@@ -33,12 +34,14 @@ function EditDialog({ item, isOpen, onClose, onSave, isNew = false }: EditDialog
       setItemId('')
       setQuantity('')
     }
-  }, [item])
+    setSearchQuery('')
+    setSearchResults([])
+  }, [item, isOpen])
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
       const results = searchItems(searchQuery.trim())
-      setSearchResults(results.slice(0, 10)) // Limit to 10 results
+      setSearchResults(results.slice(0, 15)) // Increased to 15 results
     }
   }
 
@@ -57,6 +60,15 @@ function EditDialog({ item, isOpen, onClose, onSave, isNew = false }: EditDialog
       return
     }
 
+    // Check for duplicates only when adding new items
+    if (isNew) {
+      const existingItem = inventoryItems.find(existingItem => existingItem.itemId === parsedItemId)
+      if (existingItem) {
+        alert(`⚠️ Vật phẩm "${getItemName(parsedItemId)}" đã tồn tại trong danh sách!\nSố lượng hiện tại: ${existingItem.quantity.toLocaleString()}\n\nVui lòng chỉnh sửa số lượng thay vì thêm mới.`)
+        return
+      }
+    }
+
     const updatedItem: InventoryItem = {
       index: item?.index || 0,
       itemId: parsedItemId,
@@ -70,7 +82,7 @@ function EditDialog({ item, isOpen, onClose, onSave, isNew = false }: EditDialog
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isNew ? 'Thêm vật phẩm mới' : 'Chỉnh sửa vật phẩm'}</DialogTitle>
         </DialogHeader>
@@ -91,46 +103,53 @@ function EditDialog({ item, isOpen, onClose, onSave, isNew = false }: EditDialog
             </div>
             
             {searchResults.length > 0 && (
-              <div className="mt-2 max-h-40 overflow-y-auto border rounded-md">
+              <div className="mt-2 max-h-60 overflow-y-auto border rounded-md">
                 {searchResults.map((result) => (
                   <div
                     key={result.id}
-                    className="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
+                    className="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0 flex justify-between items-center"
                     onClick={() => handleSelectItem(result.id)}
                   >
-                    <div className="text-sm font-medium">{result.name}</div>
-                    <div className="text-xs text-gray-500">ID: {result.id}</div>
+                    <div>
+                      <div className="text-sm font-medium">{result.name}</div>
+                      <div className="text-xs text-gray-500">ID: {result.id}</div>
+                    </div>
+                    <Button size="sm" variant="ghost">
+                      Chọn
+                    </Button>
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          <div>
-            <label className="text-sm font-medium">ID vật phẩm</label>
-            <Input
-              type="number"
-              placeholder="Nhập ID vật phẩm"
-              value={itemId}
-              onChange={(e) => setItemId(e.target.value)}
-              className="mt-1"
-            />
-            {itemId && (
-              <div className="text-xs text-gray-600 mt-1">
-                Tên: {getItemName(parseInt(itemId) || 0)}
-              </div>
-            )}
-          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium">ID vật phẩm</label>
+              <Input
+                type="number"
+                placeholder="Nhập ID vật phẩm"
+                value={itemId}
+                onChange={(e) => setItemId(e.target.value)}
+                className="mt-1"
+              />
+              {itemId && (
+                <div className="text-xs text-gray-600 mt-1">
+                  Tên: {getItemName(parseInt(itemId) || 0)}
+                </div>
+              )}
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">Số lượng</label>
-            <Input
-              type="number"
-              placeholder="Nhập số lượng"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              className="mt-1"
-            />
+            <div>
+              <label className="text-sm font-medium">Số lượng</label>
+              <Input
+                type="number"
+                placeholder="Nhập số lượng"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="mt-1"
+              />
+            </div>
           </div>
 
           <div className="flex gap-2 pt-4">
@@ -162,6 +181,12 @@ const InventoryManagerPage = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [searchFilter, setSearchFilter] = useState('')
+  const [quickAddId, setQuickAddId] = useState('')
+  const [quickAddQuantity, setQuickAddQuantity] = useState('')
+  const [batchAddText, setBatchAddText] = useState('')
+  const [editingQuantity, setEditingQuantity] = useState<{index: number, value: string} | null>(null)
+  const [showFloatingForm, setShowFloatingForm] = useState(false)
+  const [showBatchModal, setShowBatchModal] = useState(false)
 
   // Filter items based on search
   const filteredItems = inventoryItems.filter(item =>
@@ -181,8 +206,128 @@ const InventoryManagerPage = () => {
   }
 
   const handleAddNew = (newItem: InventoryItem) => {
+    // Check if item already exists
+    const existingItem = inventoryItems.find(item => item.itemId === newItem.itemId)
+    if (existingItem) {
+      alert(`⚠️ Vật phẩm "${newItem.itemName}" đã tồn tại trong danh sách!\nVui lòng chỉnh sửa số lượng thay vì thêm mới.`)
+      return
+    }
+    
     addNewItem(newItem.itemId, newItem.quantity)
     setIsAddDialogOpen(false)
+  }
+
+  const handleQuickAdd = () => {
+    const parsedId = parseInt(quickAddId)
+    const parsedQuantity = parseInt(quickAddQuantity)
+    
+    if (isNaN(parsedId) || isNaN(parsedQuantity) || parsedId <= 0 || parsedQuantity <= 0) {
+      alert('Vui lòng nhập ID và số lượng hợp lệ')
+      return
+    }
+
+    // Check if item already exists
+    const existingItem = inventoryItems.find(item => item.itemId === parsedId)
+    if (existingItem) {
+      const itemName = getItemName(parsedId)
+      alert(`⚠️ Vật phẩm "${itemName}" đã tồn tại trong danh sách!\nSố lượng hiện tại: ${existingItem.quantity.toLocaleString()}\n\nVui lòng click vào số lượng trong bảng để chỉnh sửa.`)
+      return
+    }
+
+    addNewItem(parsedId, parsedQuantity)
+    setQuickAddId('')
+    setQuickAddQuantity('')
+    
+    // Show success feedback
+    const itemName = getItemName(parsedId)
+    alert(`✅ Đã thêm: ${itemName} x${parsedQuantity}`)
+  }
+
+  const handleBatchAdd = () => {
+    const lines = batchAddText.trim().split('\n')
+    let successCount = 0
+    let errorCount = 0
+    let duplicateCount = 0
+    const duplicateItems: string[] = []
+
+    lines.forEach(line => {
+      const parts = line.trim().split(/[,\s]+/)
+      if (parts.length >= 2) {
+        const id = parseInt(parts[0])
+        const quantity = parseInt(parts[1])
+        
+        if (!isNaN(id) && !isNaN(quantity) && id > 0 && quantity > 0) {
+          // Check if item already exists
+          const existingItem = inventoryItems.find(item => item.itemId === id)
+          if (existingItem) {
+            duplicateCount++
+            const itemName = getItemName(id)
+            duplicateItems.push(`${itemName} (ID: ${id})`)
+          } else {
+            addNewItem(id, quantity)
+            successCount++
+          }
+        } else {
+          errorCount++
+        }
+      } else if (line.trim()) {
+        errorCount++
+      }
+    })
+
+    // Show detailed feedback
+    let message = ''
+    if (successCount > 0) {
+      message += `✅ Đã thêm thành công ${successCount} vật phẩm`
+    }
+    if (duplicateCount > 0) {
+      message += `${successCount > 0 ? '\n' : ''}⚠️ ${duplicateCount} vật phẩm đã tồn tại:\n${duplicateItems.slice(0, 5).join('\n')}${duplicateItems.length > 5 ? '\n...' : ''}`
+    }
+    if (errorCount > 0) {
+      message += `${(successCount > 0 || duplicateCount > 0) ? '\n' : ''}❌ ${errorCount} dòng lỗi định dạng`
+    }
+
+    if (message) {
+      alert(message)
+    }
+
+    if (successCount > 0) {
+      setBatchAddText('')
+      setShowBatchModal(false)
+    } else if (duplicateCount > 0 && errorCount === 0) {
+      // If only duplicates, close modal but show message
+      alert('💡 Mẹo: Bạn có thể click vào số lượng trong bảng để chỉnh sửa các vật phẩm đã tồn tại.')
+    }
+  }
+
+  const handleQuantityClick = (item: InventoryItem) => {
+    setEditingQuantity({ index: item.index, value: item.quantity.toString() })
+  }
+
+  const handleQuantityChange = (value: string) => {
+    if (editingQuantity) {
+      setEditingQuantity({ ...editingQuantity, value })
+    }
+  }
+
+  const handleQuantitySave = () => {
+    if (editingQuantity) {
+      const newQuantity = parseInt(editingQuantity.value)
+      if (!isNaN(newQuantity) && newQuantity >= 0) {
+        const item = inventoryItems.find(i => i.index === editingQuantity.index)
+        if (item) {
+          updateInventoryItem({
+            ...item,
+            quantity: newQuantity
+          })
+        }
+      }
+      setEditingQuantity(null)
+    }
+  }
+
+  const handleQuantityCancel = () => {
+    setEditingQuantity(null)
   }
 
   const handleDelete = (item: InventoryItem) => {
@@ -245,13 +390,6 @@ const InventoryManagerPage = () => {
                 <RefreshCwIcon className="w-4 h-4 mr-2" />
                 Làm mới
               </Button>
-              <Button 
-                onClick={() => setIsAddDialogOpen(true)}
-                size="sm"
-              >
-                <PlusIcon className="w-4 h-4 mr-2" />
-                Thêm vật phẩm
-              </Button>
             </div>
           </div>
         </CardHeader>
@@ -296,7 +434,14 @@ const InventoryManagerPage = () => {
                         {displayIndex + 1}
                       </TableCell>
                       <TableCell className="font-mono text-sm">
-                        {item.itemId}
+                        <div className="flex items-center gap-2">
+                          <span>{item.itemId}</span>
+                          {inventoryItems.filter(i => i.itemId === item.itemId).length > 1 && (
+                            <span className="text-xs bg-yellow-100 text-yellow-800 px-1 py-0.5 rounded" title="ID trùng lặp">
+                              ⚠️
+                            </span>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="font-medium">{item.itemName}</div>
@@ -305,7 +450,35 @@ const InventoryManagerPage = () => {
                         )}
                       </TableCell>
                       <TableCell className="text-right font-mono">
-                        {item.quantity.toLocaleString()}
+                        {editingQuantity && editingQuantity.index === item.index ? (
+                          <div className="flex items-center gap-1 justify-end">
+                            <Input
+                              type="number"
+                              value={editingQuantity.value}
+                              onChange={(e) => handleQuantityChange(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === 'Enter') handleQuantitySave()
+                                if (e.key === 'Escape') handleQuantityCancel()
+                              }}
+                              className="w-20 h-7 text-right"
+                              autoFocus
+                            />
+                            <Button size="sm" variant="ghost" onClick={handleQuantitySave} className="h-7 w-7 p-0">
+                              ✓
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={handleQuantityCancel} className="h-7 w-7 p-0">
+                              ✕
+                            </Button>
+                          </div>
+                        ) : (
+                          <span 
+                            className="cursor-pointer hover:bg-blue-100 px-2 py-1 rounded"
+                            onClick={() => handleQuantityClick(item)}
+                            title="Click để chỉnh sửa số lượng"
+                          >
+                            {item.quantity.toLocaleString()}
+                          </span>
+                        )}
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-1 justify-center">
@@ -375,6 +548,7 @@ const InventoryManagerPage = () => {
           setEditingItem(null)
         }}
         onSave={handleSaveEdit}
+        inventoryItems={inventoryItems}
       />
 
       {/* Add Dialog */}
@@ -384,7 +558,152 @@ const InventoryManagerPage = () => {
         onClose={() => setIsAddDialogOpen(false)}
         onSave={handleAddNew}
         isNew={true}
+        inventoryItems={inventoryItems}
       />
+
+      {/* Batch Add Modal */}
+      <Dialog open={showBatchModal} onOpenChange={setShowBatchModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>📋 Thêm hàng loạt vật phẩm</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Nhập danh sách vật phẩm (mỗi dòng: ID số_lượng)
+              </label>
+              <textarea
+                placeholder="Ví dụ:&#10;68 10&#10;69 5&#10;70 3&#10;29 100"
+                value={batchAddText}
+                onChange={(e) => setBatchAddText(e.target.value)}
+                className="w-full h-32 px-3 py-2 border border-gray-300 rounded-md text-sm resize-none"
+              />
+            </div>
+            
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <h5 className="text-sm font-medium text-blue-900 mb-2">💡 Mẹo:</h5>
+              <ul className="text-xs text-blue-700 space-y-1">
+                <li>• Mỗi dòng: ID khoảng_trắng số_lượng</li>
+                <li>• Có thể dùng dấu phẩy: ID,số_lượng</li>
+                <li>• Bỏ qua dòng trống</li>
+              </ul>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => {
+                  handleBatchAdd()
+                  setShowBatchModal(false)
+                }} 
+                className="flex-1"
+                disabled={!batchAddText.trim()}
+              >
+                <PlusIcon className="w-4 h-4 mr-1" />
+                Thêm hàng loạt
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setBatchAddText('')}
+                disabled={!batchAddText.trim()}
+              >
+                Xóa
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Floating Action Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        {showFloatingForm && (
+          <div className="bg-white rounded-lg shadow-2xl border border-gray-200 p-4 mb-4 min-w-[320px] animate-in slide-in-from-bottom-2 duration-200">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-semibold text-gray-900">⚡ Thêm nhanh</h4>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setShowFloatingForm(false)}
+                className="h-6 w-6 p-0 hover:bg-red-100"
+              >
+                ×
+              </Button>
+            </div>
+            
+            <div className="space-y-3">
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  placeholder="ID"
+                  value={quickAddId}
+                  onChange={(e) => setQuickAddId(e.target.value)}
+                  className="w-20 text-sm"
+                  onKeyPress={(e) => e.key === 'Enter' && quickAddQuantity && handleQuickAdd()}
+                />
+                <Input
+                  type="number"
+                  placeholder="SL"
+                  value={quickAddQuantity}
+                  onChange={(e) => setQuickAddQuantity(e.target.value)}
+                  className="w-20 text-sm"
+                  onKeyPress={(e) => e.key === 'Enter' && quickAddId && handleQuickAdd()}
+                />
+                <Button 
+                  onClick={handleQuickAdd} 
+                  size="sm"
+                  className="whitespace-nowrap bg-blue-600 hover:bg-blue-700"
+                  disabled={!quickAddId || !quickAddQuantity || inventoryItems.some(item => item.itemId === parseInt(quickAddId))}
+                >
+                  <PlusIcon className="h-4 w-4 mr-1" />
+                  Thêm
+                </Button>
+              </div>
+              
+              {quickAddId && (
+                <div className="text-xs text-gray-600 bg-blue-50 p-2 rounded border-l-2 border-blue-300">
+                  <strong>Tên:</strong> {getItemName(parseInt(quickAddId) || 0)}
+                  {inventoryItems.some(item => item.itemId === parseInt(quickAddId)) && (
+                    <div className="text-orange-600 font-medium mt-1">
+                      ⚠️ Vật phẩm đã tồn tại - chỉ có thể chỉnh sửa số lượng
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setIsAddDialogOpen(true)}
+                  className="flex-1 text-xs"
+                >
+                  📝 Chi tiết
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowBatchModal(true)}
+                  className="flex-1 text-xs"
+                >
+                  📋 Hàng loạt
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        <Button
+          onClick={() => setShowFloatingForm(!showFloatingForm)}
+          className={`h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 ${
+            showFloatingForm 
+              ? 'bg-red-600 hover:bg-red-700 rotate-45' 
+              : 'bg-blue-600 hover:bg-blue-700'
+          }`}
+          size="sm"
+        >
+          <PlusIcon className="h-6 w-6" />
+        </Button>
+      </div>
     </div>
   )
 }
